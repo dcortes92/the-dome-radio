@@ -1,0 +1,34 @@
+{
+  "name": "the-dome-radio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The Dome — World Radio Atlas PWA",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "lint": "eslint src netlify/functions --ext .js",
+    "format": "prettier --write \"src/**/*.{js,css}\" \"netlify/functions/**/*.js\" \"*.{js,json,md}\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.49.1",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "happy-dom": "^20.10.6",
+    "prettier": "^3.4.2",
+    "vite": "^6.0.6",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.10",
+    "stripe": "^17.5.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

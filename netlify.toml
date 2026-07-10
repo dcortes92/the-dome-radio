@@ -1,6 +1,18 @@
 # The Dome — World Radio Atlas · Netlify config
-# El HTML y el manifest se revalidan siempre, así cada deploy se ve al instante.
-# Los iconos (filename estable) se cachean una semana.
+# Vite builds to dist/; Functions live under netlify/functions.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
 [[headers]]
   for = "/"
@@ -21,6 +33,11 @@
   for = "/sw.js"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
 
 [[headers]]
   for = "/*.png"
