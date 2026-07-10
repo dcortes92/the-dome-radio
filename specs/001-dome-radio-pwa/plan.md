@@ -1,16 +1,23 @@
 # Implementation Plan: The Dome Radio PWA
 
-**Branch**: `main` (feature dir `specs/001-dome-radio-pwa`; create `001-dome-radio-pwa` branch before implementation if desired) | **Date**: 2026-07-09 | **Spec**: [spec.md](./spec.md)
+**Branch**: `001-dome-radio-pwa` | **Date**: 2026-07-10 | **Spec**: [spec.md](./spec.md)
 
 **Input**: Feature specification from `/specs/001-dome-radio-pwa/spec.md`  
 **Prior architecture notes**: Cursor plan `backend_and_ui_refactor_299314b5` (folded into research + this plan)  
-**Constraint**: Keep costs at or near zero for now (free tiers; document first paid cliff)
+**Constraint**: Keep costs at or near zero for now (free tiers; document first paid cliff)  
+**Re-validated**: 2026-07-10 via `/speckit-plan` (React vs vanilla, PWA packaging, near-zero backend)
 
 **Note**: This template is filled in by the `/speckit-plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
 
-Evolve the working Netlify-hosted HTML/JS radio atlas into a maintainable **PWA** with real **auth**, **cross-device favorites sync**, **display ads** for free listeners, a **Stripe subscription** that removes ads, and **Chromecast + AirPlay casting** — without a React rewrite. Modularize the ~3k-line monolith with **Vite + ES modules**, use **Supabase Free** for Auth/Postgres/RLS, and **Netlify Functions** for Stripe secrets. Creator/live broadcast stays frozen/hidden. Near-zero cost is the default; Supabase Free inactivity pause is the main production risk to watch.
+Evolve the working Netlify-hosted HTML/JS radio atlas into a maintainable **PWA** with real **auth**, **cross-device favorites sync**, **display ads** for free listeners, a **Stripe subscription** that removes ads, and **Chromecast + AirPlay casting**.
+
+**UI stack verdict**: Keep vanilla JS + CSS; **do not migrate to React in v1**. The prototype works; the problem is packaging (monolith + inlined assets), not the lack of a framework. Modularize with **Vite + ES modules**, extract ~700 KB base64 images, preserve PWA (`manifest` + `sw.js`).
+
+**Backend verdict (near-zero $)**: **Supabase Free** (Auth + Postgres + RLS) for identity/favorites; **Netlify Functions** for Stripe Checkout/portal/webhook secrets; **Stripe** (pay-as-you-go); display ads for free tier. No custom always-on server. Creator/live broadcast stays frozen/hidden. First intentional paid cliff: Supabase Pro (~$25/mo) if Free inactivity pause hurts production.
+
+**Current baseline (2026-07-10)**: Feature branch `001-dome-radio-pwa` has the Vite modular app plus Jul 2 prototype chrome (bottom `nav-pill`, header cast/search/avatar, neumorphic Now Playing, desktop frame locked at 412px). Speckit backend (Supabase/Stripe/ads/cast modules) is preserved. Use Node 20+ (`nvm use 22`).
 
 ## Technical Context
 
@@ -29,18 +36,19 @@ Evolve the working Netlify-hosted HTML/JS radio atlas into a maintainable **PWA*
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*  
 *Source: `.specify/memory/constitution.md` (The Dome Constitution v1.0.0)*
 
-- **I. Code Quality**: PASS — Modularize existing patterns (`store`, `api()`, `play()`); no speculative framework; Creator isolated as dead-path hidden module; lint/format via Vite/ESLint when introduced.
+- **I. Code Quality**: PASS — Modularize existing patterns (`store`, `api()`, `play()`); no speculative React rewrite; Creator isolated as dead-path hidden module; lint/format via Vite/ESLint when introduced.
 - **II. Testing Standards**: PASS — Plan maps P1/P2 stories to Vitest + smoke E2E; critical paths (discovery, playback, favorites, ads/premium, cast UI states, PWA) covered; physical Chromecast/AirPlay primarily manual + CastContext mocks (see Complexity Tracking).
 - **III. User Experience Consistency**: PASS — Preserve monochrome atlas UI; ads as intentional slots matching UI; auth prompts reuse existing sheets; cast status uses shared loading/empty/error/playing patterns; dark mode retained.
 - **IV. Performance Requirements**: PASS — Targets in Technical Context + Spec NFRs; image extraction is primary weight win; ad + Cast scripts lazy-loaded; SW does not precache ads/API/Cast CDN.
 - **Quality Gates**: No unjustified exceptions. Cast/AirPlay scope (stakeholder B) and platform limits documented in research and Complexity Tracking.
 
-### Post-design re-check (Phase 1)
+### Post-design re-check (Phase 1) — 2026-07-10
 
 - Data model + contracts keep payment writes service-role-only (security).
 - Cast/AirPlay client contract and optional static receiver documented; no paid cast SaaS.
 - Quickstart defines measurable validation for perf, entitlement, and physical cast targets.
-- Still PASS; Complexity Tracking updated for stakeholder B.
+- Near-zero cost stack documented; Supabase Free pause recorded in Complexity Tracking (not a principle violation — explicit ops trade-off).
+- Still PASS.
 
 ## Project Structure
 
