@@ -219,6 +219,10 @@ audio.addEventListener('playing',()=>{ state.playing=true; refreshPlayUI(); if(s
 let mapBuilt=false;
 
 function activateView(view){
+  if (view === 'creator') {
+    domeToast('Broadcast isn’t available yet');
+    return;
+  }
   const viewId = view === 'map' ? 'mapview' : view;
   document.querySelectorAll('nav button').forEach(x=>{
     const on = x.dataset.view === view;
@@ -240,12 +244,25 @@ function activateView(view){
   } else GRAPH.active=false;
   $('#app').classList.toggle('app-dark', view==='map' && mapMode==='map');
   if(view==='library') renderLibrary();
-  if(view==='creator' && window.initCreator) window.initCreator();
+}
+
+function domeToast(msg){
+  const host = $('.app') || document.body;
+  let t = $('#hdrToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'hdrToast';
+    t.className = 'net-toast';
+    host.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('show'), 1900);
 }
 
 document.querySelectorAll('nav button').forEach(b=>{
   b.addEventListener('click',()=>{
-    if (b.hidden) return;
     activateView(b.dataset.view);
   });
 });
@@ -1523,13 +1540,9 @@ initMediaSession(() => ({
   },
 }));
 
-// Lazy-load creator only if tab ever un-hidden
+// Creator/Studio remains frozen — Broadcast control shows a toast only (see activateView)
 export async function ensureCreator() {
   await import('./views/creator/legacy.js');
 }
-
-document.querySelectorAll('nav button[data-view="creator"]').forEach((b) => {
-  b.addEventListener('click', () => ensureCreator(), { once: true });
-});
 
 export { state, play, store, api, $ };
