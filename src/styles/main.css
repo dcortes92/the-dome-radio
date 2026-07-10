@@ -1,19 +1,23 @@
+
 :root{
+  color-scheme:light;
   --bg:#E7E6E3;
   --panel:#FFFFFF;
   --panel-2:#DEDDD9;
   --line:#DEDDDA;
   --amber:#E0301E;       /* red micro-accent */
-  --amber-dim:#B3261A;
+  --amber-dim:#B3261A;--amber-tx:#FF6B5C;
   --cream:#1A1A1A;
-  --muted:#8A8985;
+  --muted:#646360;
   --signal:#E0301E;
   --danger:#D14B2F;
   --dock-h:148px;
+  --nav-h:88px;
   --radius:18px;
   --gutter:20px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{height:100%}
 body{
   background:#E4E3E1;
@@ -27,9 +31,9 @@ body{
 .app{
   position:relative;width:100%;height:100dvh;max-width:100%;
   background:var(--bg);display:flex;flex-direction:column;overflow:hidden;
-  --dock-off:0px;
+  --dock-off:calc(var(--nav-h) + 6px);
 }
-.app.has-dock{--dock-off:calc(var(--dock-h) + 10px)}
+.app.has-dock{--dock-off:calc(var(--nav-h) + var(--dock-h) + 22px)}
 .device{display:contents}
 .hwbtn,.statusbar{display:none}
 @media(min-width:560px){
@@ -55,7 +59,7 @@ body{
   .hw-voldn{left:-3px;top:242px;height:52px}
   .hw-power{right:-3px;top:202px;height:80px}
   /* screen */
-  .app{position:relative;max-width:412px;height:min(880px,90dvh);border-radius:50px;border:none;box-shadow:none}
+  .app{position:relative;width:412px;max-width:412px;height:min(852px,92dvh);border-radius:50px;border:none;box-shadow:none}
   .app::after{content:"";position:absolute;inset:0;border-radius:50px;pointer-events:none;z-index:4000;
     background:linear-gradient(118deg, rgba(255,255,255,.15), rgba(255,255,255,.02) 26%, rgba(255,255,255,0) 46%)}
   /* status bar + dynamic island */
@@ -75,42 +79,45 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")}
 
 /* ---------- Header ---------- */
-header{padding:22px var(--gutter) 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto}
+header{padding:22px var(--gutter) 14px;display:flex;align-items:center;justify-content:flex-start;gap:10px;flex:0 0 auto}
 .brand h1{
   font-family:'Inter Tight',sans-serif;
   font-weight:800;font-size:32px;letter-spacing:-.02em;line-height:.95;color:#F5F4F2}
-.brand{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
-.brand-logo{height:26.4px;width:auto;max-width:72vw;display:block}
+.brand{flex:0 0 auto;display:flex;align-items:center;min-width:0}
+.brand-logo{height:30px;width:auto;max-width:72vw;display:block}
 .brand h1 span{color:#7A7976}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;color:#9C9B98;text-transform:uppercase;margin-bottom:6px}
-.onair{display:flex;align-items:center;justify-content:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;color:#9C9B98;text-transform:uppercase}
+.onair{display:flex;align-items:center;justify-content:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;color:#9C9B98;text-transform:uppercase;margin-left:auto}
 .onair i{width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal);animation:pulse 2.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* ---------- Tabs ---------- */
-nav{display:flex;gap:4px;margin:20px;padding:5px;flex:0 0 auto;
-  background:#1C1C1A;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+nav{position:absolute;left:0;right:0;bottom:0;height:var(--nav-h);z-index:60;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 var(--gutter) env(safe-area-inset-bottom,0px)}
+.nav-pill{width:100%;display:flex;align-items:center;justify-content:space-around;gap:2px;background:#1A1A1A;border-radius:999px;padding:9px 12px;box-shadow:0 14px 32px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.05)}
+.nav-bcast{flex:0 0 auto;width:52px;height:52px;border-radius:50%;border:0;cursor:pointer;color:#fff;padding:0;background:radial-gradient(120% 120% at 30% 25%,#F0432F,#D2281A 60%,#B11F12);box-shadow:inset 0 1px 0 rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;transition:.18s}
+.nav-bcast:active{transform:scale(.93)}
+.nav-bcast svg{width:23px;height:23px}
+.nav-bcast.active{box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
 nav::-webkit-scrollbar{display:none}
-nav button{
-  flex:1 1 0;min-width:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  background:transparent;border:0;color:#9C9B98;white-space:nowrap;
-  padding:11px 8px;border-radius:999px;cursor:pointer;transition:.25s}
-nav button.active{background:#F5F4F2;color:#1A1A1A;font-weight:600}
+.nav-pill button{display:flex;align-items:center;justify-content:center;background:transparent;border:0;color:#8B8A87;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;text-transform:uppercase;font-weight:500;padding:11px;border-radius:999px;transition:padding .44s cubic-bezier(.4,0,.2,1),background .3s ease,color .3s ease}
+.nav-pill button svg{width:23px;height:23px;flex:0 0 auto}
+.nav-pill button .nav-lbl{display:grid;grid-template-columns:0fr;opacity:0;margin-left:0;transition:grid-template-columns .44s cubic-bezier(.4,0,.2,1),opacity .28s ease .05s,margin-left .44s cubic-bezier(.4,0,.2,1)}
+.nav-pill button .nav-lbl>span{overflow:hidden;min-width:0;white-space:nowrap}
+.nav-pill button.active{background:#F5F4F2;color:#161616;padding:14px 16px;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.nav-pill button.active .nav-lbl{grid-template-columns:1fr;opacity:1;margin-left:8px}
 
 /* ---------- Top bar: panel oscuro con elementos invertidos ---------- */
-.statusbar,header,nav{background:#1A1A1A}
+.statusbar,header{background:#1A1A1A}
 .statusbar{color:#F5F4F2}
 .island{box-shadow:inset 0 0 2px rgba(255,255,255,.08), 0 0 0 1px rgba(255,255,255,.09), 0 1px 3px rgba(0,0,0,.5)}
 
 nav button:hover:not(.active){color:#C7C6C3}
 
-
 nav button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
-
 
 /* ---------- Views ---------- */
 main{flex:1;position:relative;overflow:hidden}
-.view{position:absolute;inset:0;overflow-y:auto;padding:0 var(--gutter) calc(var(--dock-off) + 24px);display:none;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.view{position:absolute;inset:0;overflow-y:auto;padding:30px var(--gutter) calc(var(--dock-off) + 24px);display:none;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 .view.active{display:block;animation:viewIn .35s cubic-bezier(.22,1,.36,1)}
 .view::-webkit-scrollbar{width:4px}
 .view::-webkit-scrollbar-thumb{background:var(--line)}
@@ -207,11 +214,11 @@ main{flex:1;position:relative;overflow:hidden}
 
 /* ---------- Player dock (signature: the dial) ---------- */
 .dock{
-  position:absolute;left:10px;right:10px;bottom:10px;height:var(--dock-h);z-index:50;
+  position:absolute;left:10px;right:10px;bottom:calc(var(--nav-h) + 12px);height:var(--dock-h);z-index:50;
   background:#161616;border-radius:32px;
   box-shadow:0 18px 44px rgba(26,26,26,.35), inset 0 0 0 1px rgba(255,255,255,.05);
   display:flex;flex-direction:column;overflow:hidden;
-  transform:translateY(calc(100% + 24px));pointer-events:none;
+  transform:translateY(calc(100% + var(--nav-h) + 24px));pointer-events:none;
   transition:transform .55s cubic-bezier(.22,1,.36,1)
 }
 .dock.show{transform:none;pointer-events:auto}
@@ -264,6 +271,60 @@ main{flex:1;position:relative;overflow:hidden}
   background:radial-gradient(120% 90% at 50% 18%, #F7F6F4, #E9E8E6 80%);overflow:hidden
 }
 .dialscr.open{display:flex;animation:fadeIn .25s}
+/* ===== Now Playing neumorphic dial (integrated SVG) ===== */
+
+/* ===== Now Playing top section (neumorphic shell, app typography) ===== */
+.dialscr .np-info{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:14px 28px 0;flex:0 0 auto;min-height:0}
+.dialscr .np-art{position:relative;width:150px;height:154px;border-radius:30px;overflow:hidden;margin:2px auto 12px;display:block;border:0;
+  background:radial-gradient(circle at 44% 24%, #fff 0, #fbfbfa 44%, #efefed 100%);
+  box-shadow:17px 21px 38px rgba(0,0,0,.10),inset 0 0 0 1px rgba(0,0,0,.045),inset 9px 9px 20px rgba(255,255,255,.72)}
+.dialscr .np-art .np-art-fill{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:24px;color:#646360}
+.dialscr .np-art .np-art-fill img{width:100%;height:100%;object-fit:cover}
+.dialscr .np-wave{position:absolute;left:0;right:0;bottom:26px;height:44px;display:flex;justify-content:center;align-items:center;gap:2px;opacity:.72;pointer-events:none}
+.dialscr .np-wave span{width:1px;border-radius:2px;background:#1A1A1A}
+.dialscr .np-name{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;line-height:1.15;color:#1A1A1A;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center;margin:0}
+.dialscr .np-freq{display:none!important}
+.dialscr .np-state{display:none!important}
+.dialscr .np-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#646360;text-align:center;margin:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dialscr .np-controls{display:flex;align-items:center;justify-content:center;gap:40px;margin:20px 0 4px}
+.dialscr .npbtn{border:0;cursor:pointer;display:grid;place-items:center}
+.dialscr .npbtn.npside{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.92);color:#1A1A1A;
+  box-shadow:8px 11px 24px rgba(0,0,0,.08),inset -4px -5px 10px rgba(0,0,0,.025),inset 4px 4px 10px rgba(255,255,255,.94)}
+.dialscr .npbtn.npside svg{width:26px;height:26px;fill:#1A1A1A}
+.dialscr .npbtn.npplay{width:84px;height:84px;border-radius:50%;color:#fff;
+  background:radial-gradient(circle at 40% 27%, #ff443f 0, #ef2f2b 54%, #e7221e 100%);
+  box-shadow:12px 15px 28px rgba(239,47,43,.23),0 0 0 7px rgba(255,255,255,.94),inset -5px -8px 15px rgba(164,0,0,.08)}
+.dialscr .npbtn.npplay svg{width:34px;height:34px;transform:translateX(2px);fill:#fff}
+.dialscr .np-extras{width:100%;padding:16px 28px 0;display:flex;flex-direction:column;gap:14px;flex:0 0 auto;max-width:440px;margin:0 auto}
+.dialscr .vol{display:flex;align-items:center;gap:14px;color:#646360}
+.dialscr .vol .vic{width:24px;height:24px;fill:currentColor;stroke:currentColor;flex:0 0 auto}
+.dialscr .vol #volRange{-webkit-appearance:none;appearance:none;flex:1;height:2px;border-radius:99px;background:#CFCECB;outline:none;margin:0;padding:0}
+.dialscr .vol #volRange::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#EE0B0B;box-shadow:4px 6px 13px rgba(238,11,11,.24);border:0;margin-top:-7px;cursor:pointer}
+.dialscr .vol #volRange::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#EE0B0B;border:0;box-shadow:4px 6px 13px rgba(238,11,11,.24);cursor:pointer}
+.dialscr .vol #volRange::-webkit-slider-runnable-track{height:2px;border-radius:99px;background:#CFCECB}
+.dialscr .vol #volRange::-moz-range-track{height:2px;border-radius:99px;background:#CFCECB}
+.dialscr .sleep{display:flex;align-items:center;gap:9px}
+.dialscr .sleep .slabel{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#646360;margin-right:2px}
+.dialscr .sleep .schip{font-family:'IBM Plex Mono',monospace;font-size:10px;border:1px solid #DEDDD9;background:transparent;color:#1A1A1A;padding:6px 12px;border-radius:999px;cursor:pointer;min-width:0;height:auto}
+.dialscr .sleep .schip.on{color:#EE0B0B;border-color:#EE0B0B;background:transparent}
+:root[data-theme="dark"] .dialscr .npbtn.npside{background:rgba(255,255,255,.92);color:#1A1A1A;box-shadow:8px 11px 24px rgba(0,0,0,.08),inset -4px -5px 10px rgba(0,0,0,.025),inset 4px 4px 10px rgba(255,255,255,.94)}
+:root[data-theme="dark"] .dialscr .npbtn.npside svg{fill:#1A1A1A}
+:root[data-theme="dark"] .dialscr .npbtn.npplay{background:radial-gradient(circle at 40% 27%, #ff443f 0, #ef2f2b 54%, #e7221e 100%);color:#fff}
+:root[data-theme="dark"] .dialscr .npbtn.npplay svg{fill:#fff}
+/* ===== Now Playing responsive fit (any mobile height) ===== */
+.dialscr .np-top{padding-top:calc(18px + env(safe-area-inset-top,0px))}
+.dialscr #dialSvg{width:100%;max-height:42dvh;display:block;margin:0 auto}
+@supports (height:1dvh){
+  .dialscr .np-art{width:clamp(104px,17dvh,150px);height:clamp(104px,17dvh,150px);border-radius:clamp(22px,3dvh,30px);margin-bottom:clamp(6px,1.4dvh,12px)}
+  .dialscr .np-info{padding-top:clamp(6px,1.4dvh,14px)}
+  .dialscr .np-controls{margin-top:clamp(10px,2.2dvh,20px)}
+  .dialscr .npbtn.npplay{width:clamp(64px,10.5dvh,84px);height:clamp(64px,10.5dvh,84px)}
+  .dialscr .npbtn.npside{width:clamp(48px,8dvh,58px);height:clamp(48px,8dvh,58px)}
+  .dialscr .np-extras{padding-top:clamp(8px,1.8dvh,16px);gap:clamp(8px,1.6dvh,14px)}
+  .dialscr .hint{margin-bottom:clamp(6px,1.5dvh,14px)}
+}
+@media (max-height:600px){.dialscr .np-wave{display:none}.dialscr .np-art{width:clamp(84px,14dvh,104px);height:clamp(84px,14dvh,104px)}}
+
 .np-top{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 0;flex:0 0 auto}
 .np-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
 .iconbtn{
@@ -290,8 +351,6 @@ main{flex:1;position:relative;overflow:hidden}
 .np-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;
   max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .np-state{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber)}
-
-
 
 .dock .info,.dock .art,.dock .dial{cursor:pointer}
 
@@ -420,8 +479,9 @@ main{flex:1;position:relative;overflow:hidden}
 .seg-toggle button.on{background:#1A1A1A;color:#FFF}
 #netHint{top:72px}
 .gw-caret{display:inline-block;font-size:8px;transform:translateY(-1px);transition:transform .25s}
-.seg-toggle button.on .gw-caret{color:#FFF}
+.seg-toggle button.on .gw-caret{color:inherit}
 .gw-open .gw-caret{transform:translateY(-1px) rotate(180deg)}
+@keyframes segPop{0%{transform:scale(1)}42%{transform:scale(1.11)}100%{transform:scale(1)}}
 .gw-drop{
   position:absolute;top:64px;left:50%;transform:translateX(-50%) translateY(-6px) scale(.97);
   width:min(330px,calc(100% - 28px));z-index:530;
@@ -453,7 +513,7 @@ main{flex:1;position:relative;overflow:hidden}
 /* ════ auth screen ════ */
 #authScr{position:absolute;inset:0;z-index:900;background:#161616;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;transition:opacity .5s ease,transform .5s cubic-bezier(.22,1,.36,1)}
 #authScr.hide{opacity:0;transform:translateY(-16px);pointer-events:none}
-.au-dial{position:absolute;top:54px;left:0;right:0;height:120px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent);mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)}
+.au-dial{position:absolute;top:34px;left:0;right:0;height:120px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent);mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)}
 .au-ticks{position:absolute;top:34px;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,#2C2C2A 0 1px,transparent 1px 14px)}
 .au-strip{position:absolute;top:48px;left:0;display:flex;white-space:nowrap;will-change:transform;animation:auDrift 70s linear infinite}
 .au-f{width:84px;flex:0 0 auto;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:#5E5D5A;position:relative;padding-top:16px}
@@ -461,13 +521,18 @@ main{flex:1;position:relative;overflow:hidden}
 .au-needle{position:absolute;top:14px;left:50%;width:2px;height:62px;margin-left:-1px;background:var(--amber);border-radius:1px;box-shadow:0 0 12px rgba(224,48,30,.5)}
 .au-needle::after{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:var(--amber)}
 @keyframes auDrift{to{transform:translateX(-3528px)}}
-.au-head{padding:0 var(--gutter);margin-bottom:20px}
+.au-head{padding:0 var(--gutter);margin-bottom:36px}
 .au-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7A7976;margin-bottom:10px}
-.au-logo{height:28.6px;width:auto;max-width:80%;display:block;margin-bottom:18px}
-.au-title{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:36px;line-height:1.0;letter-spacing:-.02em;color:#F5F4F2;margin:0}
-.au-title span{color:#7A7976}
-.au-sub{font:13px/1.5 Inter,sans-serif;color:#8A8986;margin:10px 0 0}
-.au-sheet{background:#1C1C1A;border-top:1px solid #2A2A28;border-radius:22px 22px 0 0;padding:16px var(--gutter) 22px;display:flex;flex-direction:column}
+.au-logo{height:118px;width:auto;max-width:76%;display:block;margin:0 auto 16px}
+.au-sub{font:13px/1.5 Inter,sans-serif;color:#8A8986;margin:10px 0 0;text-align:center}
+.au-sheet{background:#1C1C1A;border-top:1px solid #2A2A28;border-radius:22px 22px 0 0;padding:16px var(--gutter) calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column}
+@supports (height:1dvh){
+  #authScr .au-logo{height:clamp(74px,13dvh,124px);margin:0 auto clamp(10px,2dvh,16px)}
+  #authScr .au-head{margin-bottom:clamp(16px,4.2dvh,44px)}
+  #authScr .au-field{margin-top:clamp(8px,1.5dvh,12px)}
+  #authScr .au-cta{margin-top:clamp(10px,2dvh,16px)}
+  #authScr .au-sub{margin-top:clamp(6px,1.2dvh,10px)}
+}
 .au-toggle{display:flex;background:#242422;border-radius:999px;padding:3px;margin-bottom:6px}
 .au-toggle button{flex:1;height:36px;border:0;border-radius:999px;background:transparent;color:#8A8986;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}
 .au-toggle button.on{background:#F5F4F2;color:#161616;font-weight:500}
@@ -487,7 +552,6 @@ main{flex:1;position:relative;overflow:hidden}
 .au-guest{display:block;width:100%;margin-top:12px;border:0;background:transparent;color:#8A8986;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px}
 .au-guest:hover{color:#F5F4F2}
 @media (prefers-reduced-motion:reduce){.au-strip{animation:none}}
-
 
 /* ════ studio ════ */
 .st-hero{padding:34px 4px 0}
@@ -542,7 +606,6 @@ input[type=range]#stFreq{width:100%;height:46px;background:transparent;-webkit-a
 .sh-grid input:focus,.sh-grid select:focus{outline:none;border-color:#161616}
 .sh-empty{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9B98;letter-spacing:.08em;padding:18px 2px}
 
-
 /* studio booth + tapes */
 .bo-wrap{margin-top:14px;padding:16px;background:#1A1A1A;border-radius:16px}
 .bo-row{display:flex;align-items:center;gap:14px}
@@ -569,17 +632,21 @@ input[type=range]#stFreq{width:100%;height:46px;background:transparent;-webkit-a
 .ep-tape{border:0;background:transparent;cursor:pointer;font-size:14px;color:#C9C8C5;padding:6px}
 .ep-tape.on{color:var(--amber)}
 .ep-del{border:0;background:transparent;color:#B6B5B1;font-size:16px;cursor:pointer;padding:6px}
+.ep-del.arm{color:#fff;background:var(--danger);font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;border-radius:999px;padding:5px 9px}
 .ep-del:hover{color:var(--amber)}
 .st-live{display:inline-flex;align-items:center;gap:8px;margin-top:14px;height:40px;padding:0 18px;border-radius:999px;border:0;background:var(--amber);color:#fff;font:600 13px 'Inter Tight',sans-serif;cursor:pointer}
 .st-live svg{width:12px;height:12px;fill:#fff}
-
 
 /* profile */
 .menu-btn{width:34px;height:34px;border-radius:10px;border:1px solid #3A3A38;background:#242422;color:#F5F4F2;cursor:pointer;flex:0 0 auto;display:grid;place-items:center;padding:0;transition:border-color .2s}
 .menu-btn svg{width:20px;height:20px}
 .menu-btn:active{transform:scale(.94)}
-.header-spacer{width:34px;height:34px;flex:0 0 auto}
 .menu-btn:hover{border-color:#F5F4F2}
+.hdr-creator{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#E8B84B;background:rgba(232,184,75,.07);border:1px solid rgba(232,184,75,.42);border-radius:999px;padding:6px 10px;cursor:pointer;white-space:nowrap;transition:.2s}
+.hdr-creator:hover{border-color:#E8B84B;background:rgba(232,184,75,.14)}
+.hdr-creator.active{background:linear-gradient(135deg,#F4C752,#E0A93C);color:#161616;border-color:transparent}
+.hdr-creator .nav-pro{margin-left:0;vertical-align:baseline}
+.hdr-creator.active .nav-pro{background:#161616;color:#F4C752}
 #profScr{position:absolute;inset:0;z-index:880;background:#161616;padding:18px var(--gutter) 24px;overflow-y:auto;animation:viewIn .3s cubic-bezier(.22,1,.36,1)}
 .pf-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .pf-close{width:34px;height:34px;border-radius:50%;border:1px solid #3A3A38;background:transparent;color:#C7C6C3;font-size:18px;cursor:pointer}
@@ -591,15 +658,20 @@ input[type=range]#stFreq{width:100%;height:46px;background:transparent;-webkit-a
 .pf-sec{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#6E6D6A;margin:16px 0 8px}
 .pf-rows{background:#1C1C1A;border:1px solid #2A2A28;border-radius:16px;overflow:hidden}
 .pf-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:15px 16px;border:0;background:transparent;color:#E8E7E4;font:14px Inter,sans-serif;cursor:pointer;text-align:left}
+.pf-sw{width:44px;height:25px;border-radius:999px;background:#3A3A38;position:relative;transition:background .22s;flex:0 0 auto}
+.pf-sw i{position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:transform .22s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.pf-switch[aria-checked="true"] .pf-sw{background:var(--amber)}
+.pf-switch[aria-checked="true"] .pf-sw i{transform:translateX(19px)}
 .pf-row + .pf-row{border-top:1px solid #262624}
 .pf-row:hover{background:#202020}
 .pf-row span{color:#5E5D5A;font-size:16px}
 .pf-out{color:var(--amber)}
 .pf-foot{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#55544F;text-align:center;margin-top:26px}
 
-
 /* tu emisora en el dial */
 .ownrow{position:relative}
+.own-del{position:absolute;top:10px;right:12px;border:0;background:transparent;color:#B6B5B1;font-size:18px;line-height:1;cursor:pointer;padding:6px;z-index:3}
+.own-del.arm{color:#fff;background:var(--danger);font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;border-radius:999px;padding:6px 10px;top:12px}
 .rank.own{display:grid;place-items:center}
 .rank.own svg{width:18px;height:18px;fill:var(--amber)}
 .art.ownart{display:grid;place-items:center;background:linear-gradient(135deg,#2A2A28,#161616);color:#F5F4F2;font:800 20px 'Inter Tight',sans-serif;border:1px solid #3A3A38}
@@ -608,12 +680,21 @@ input[type=range]#stFreq{width:100%;height:46px;background:transparent;-webkit-a
 /* decades mode */
 #decadePanel{position:absolute;inset:0;padding:64px var(--gutter) calc(var(--dock-off) + 24px);overflow-y:auto;z-index:6}
 .dec-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:6px}
+.dec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.dec-card{position:relative;aspect-ratio:1.16;border-radius:20px;background:var(--panel);border:1.5px solid var(--line);
+  padding:18px 20px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;text-align:left;
+  cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;-webkit-tap-highlight-color:transparent}
+.dec-card b{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:clamp(38px,12.5vw,54px);line-height:.86;letter-spacing:-.025em;color:var(--cream)}
+.dec-card span{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.dec-card.on{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber),0 10px 26px rgba(224,48,30,.16)}
+.dec-card.on::after{content:'';position:absolute;top:15px;right:15px;width:11px;height:11px;border-radius:50%;background:var(--amber)}
+.dec-slabel{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 14px 2px}
+@media(hover:hover){.dec-card:hover{transform:translateY(-2px)}}
 .dec-chips button{height:42px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#3F3B3B;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:15px;letter-spacing:.01em;cursor:pointer;transition:all .18s;position:relative}
 .dec-chips button .yr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:#9C9B98;display:block;margin-top:-2px;font-weight:400}
 .dec-chips button.on{background:#161616;border-color:#161616;color:#F5F4F2}
 .dec-chips button.on .yr{color:#8A8986}
 .dec-hint{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9C9B98;margin:14px 0 16px}
-
 
 /* ════ on air — ham radio operator ════ */
 .op-hero{padding:34px 4px 0}
@@ -670,11 +751,11 @@ input[type=range]#stFreq{width:100%;height:46px;background:transparent;-webkit-a
 .op-actions{display:flex;gap:8px;margin-top:18px}
 .op-actions button{flex:1;height:36px;border-radius:999px;border:1px solid #3A3A38;background:transparent;color:#C7C6C3;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
 
-
 /* ════ creator (premium hub) ════ */
-#creator{position:relative}
+#creator{position:absolute;inset:0;overflow-y:auto}
 .cr-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:10px 0 14px;background:linear-gradient(#E7E6E3 70%,rgba(231,230,227,0))}
+  padding:10px 0 14px;background:transparent;pointer-events:none}
+.cr-bar>*{pointer-events:auto}
 .cr-toggle{position:static;transform:none;box-shadow:none;margin:0}
 .cr-pro{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
   color:#161616;background:linear-gradient(135deg,#F4C752,#E0A93C);padding:5px 9px;border-radius:6px;font-weight:500;flex:0 0 auto}
@@ -699,7 +780,6 @@ nav button.active .nav-pro{background:#F5F4F2}
 .segnum{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em}
 .seglab{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em}
 
-
 /* toggle de vista grid/lista en Frequencies */
 .vtoggle{margin-left:auto;display:flex;gap:2px;background:#DDDCD9;border-radius:9px;padding:2px}
 .vbtn{width:28px;height:24px;border:0;background:transparent;border-radius:7px;cursor:pointer;display:grid;place-items:center;transition:.2s;padding:0}
@@ -723,9 +803,7 @@ nav button.active .nav-pro{background:#F5F4F2}
 .lrow:hover .larrow{color:#1A1A1A;transform:translateX(2px)}
 .lrow .lcode{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9B98;letter-spacing:.08em;flex:0 0 auto}
 
-
 /* World Map (globo): toda la sección en oscuro */
-
 
 /* leaflet map + popup */
 .leaflet-container{background:#141312;font-family:'Inter',sans-serif}
@@ -737,7 +815,6 @@ nav button.active .nav-pro{background:#F5F4F2}
 .lpop span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em}
 .lplay{margin-top:4px;border:0;background:#E0301E;color:#FFF;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;padding:7px 12px;border-radius:8px;cursor:pointer}
 
-
 /* World Map: toda la sección con fondo oscuro */
 #mapview.map-dark{background:#141312}
 #mapview.map-dark .map-hint{color:#7C7B78}
@@ -745,24 +822,234 @@ nav button.active .nav-pro{background:#F5F4F2}
 #mapview.map-dark #discToggle button{color:#9C9B98}
 #mapview.map-dark #discToggle button.on{background:#F5F4F2;color:#1A1A1A}
 
-
 /* World Map activo: oscurecer toda la app (incluida la zona de tabs) */
 #app.app-dark{background:#141312}
 
-/* ════ offline / ads / cast (v1 additions) ════ */
-.offline-banner{
-  position:fixed;top:0;left:0;right:0;z-index:9999;
-  background:#1A1A1A;color:#F2F1EF;font:500 12px/1.4 Inter,system-ui,sans-serif;
-  text-align:center;padding:8px 12px;
+/* ===== Emergency mode ===== */
+#offBanner{position:absolute;left:0;right:0;top:0;z-index:870;display:none;align-items:center;gap:8px;width:100%;padding:8px var(--gutter);background:#E0301E;color:#fff;border:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
+#offBanner.show{display:flex}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:obPulse 1.4s infinite;flex:0 0 auto}
+@keyframes obPulse{0%,100%{opacity:1}50%{opacity:.25}}
+.ob-txt{font-weight:600}.ob-cta{margin-left:auto}
+#emergScr{position:absolute;inset:0;z-index:890;background:#141414;padding:18px var(--gutter) 32px;overflow-y:auto;animation:emIn .32s cubic-bezier(.22,1,.36,1)}
+@keyframes emIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.em-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.em-status{display:flex;align-items:center;gap:9px;padding:11px 14px;border-radius:12px;background:#1C1C1A;border:1px solid #2A2A28;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#9C9B98;margin-bottom:22px}
+.em-dot{width:8px;height:8px;border-radius:50%;background:#3FB950;flex:0 0 auto}
+.em-status.off .em-dot{background:#E0301E}
+.em-hero{margin-bottom:6px}
+.em-h{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:24px;line-height:1.06;letter-spacing:-.02em;color:#F5F4F2;margin:0 0 10px}
+.em-h span{color:#FF6B5C}
+.em-p{font:13px/1.55 Inter,sans-serif;color:#9C9B98;margin:0}
+.em-sec{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#646360;margin:24px 0 9px}
+.em-rows{display:flex;flex-direction:column;gap:8px}
+.em-row{display:flex;align-items:center;gap:12px;width:100%;padding:13px 15px;background:#1C1C1A;border:1px solid #2A2A28;border-radius:13px;text-align:left;text-decoration:none;color:inherit}
+.em-ico{font-size:15px;width:20px;text-align:center;flex:0 0 auto}
+.em-main{flex:1;min-width:0}
+.em-lbl{font-size:14px;color:#F5F4F2;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.em-val{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9C9B98;letter-spacing:.04em;margin-top:2px}
+.em-del{color:#646360;font-size:20px;line-height:1;padding:2px 6px;background:none;border:0;cursor:pointer;flex:0 0 auto}
+.em-del:hover{color:#E0301E}
+.em-empty{padding:13px 15px;color:#646360;font-size:13px;font-style:italic;background:#191919;border-radius:13px}
+.em-add{width:100%;padding:11px;margin-top:8px;background:none;border:1px dashed #3A3A38;border-radius:13px;color:#9C9B98;font-size:13px;cursor:pointer}
+.em-add:hover{border-color:#E0301E;color:#FF6B5C}
+.em-check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
+.em-check li{display:flex;gap:10px;align-items:flex-start;font:13px/1.4 Inter,sans-serif;color:#C9C8C5;padding:10px 14px;background:#1A1A1A;border-radius:11px}
+.em-check li::before{content:'▸';color:#FF6B5C;flex:0 0 auto}
+/* ===== WCAG AA contrast pass ===== */
+.np-title,.np-meta,.vol,.slabel{color:#9C9B98}
+#authScr .au-f,#authScr .au-toggle button:not(.on),.st-card .st-tagline,.st-card .st-call,.st-card .st-freq span,.st-card .st-freqview i,.bo-wrap .bo-state,#profScr .pf-row span,#profScr .pf-mail,#profScr .au-eyebrow,.dec-chips button.on .yr,#mapview.map-dark .map-hint,#netFit{color:#9C9B98}
+.st-title span,.op-title span,.op-bandhead .freq span,.op-listen-label,.op-meta,.op-stat span,.op-prop,.op-logmeta,.op-empty,.op-contact .csig span,.dec-hint,.dec-chips button .yr,.sh-empty,.sh-meta,.ep-meta,.lrow .lcount,.au-eyebrow,.map-hint{color:#646360}
+.st-sub{color:#5C5B57}
+.np-state,.au-err,.st-card .st-status,.bo-wrap .bo-err,#profScr .pf-out,.chip.active,.chip:hover{color:var(--amber-tx)}
+.ep-tape.on,.gw-all{color:var(--amber-dim)}
+/* ════ keyboard focus-visible — app-wide, on-brand, additive ════
+   Only renders for keyboard / switch / assistive navigation (:focus-visible),
+   so pointer interaction stays visually unchanged. */
+:where(
+  a, button, input, select, textarea, summary,
+  [tabindex], [role="button"], [role="link"], [role="tab"],
+  .station, .country, .lrow, .gcard, .mcard, .lcard, .pf-row, .em-row
+):focus-visible{
+  outline:2px solid var(--signal);
+  outline-offset:2px;
+  border-radius:8px;
 }
-.ad-slot{min-height:50px;margin:8px var(--gutter,20px);display:flex;align-items:center;justify-content:center}
-.ad-slot[hidden]{display:none!important}
-.ad-placeholder{
-  width:100%;max-width:320px;height:50px;border:1px dashed var(--line,#DEDDDA);
-  color:var(--muted,#8A8985);font:500 11px/50px IBM Plex Mono,monospace;
-  text-align:center;letter-spacing:.08em;text-transform:uppercase;
+/* keep rounded controls' rings hugging their shape */
+.chip:focus-visible,.gw-grid button:focus-visible,.gw-all:focus-visible,
+.seg-toggle button:focus-visible,.net-tools button:focus-visible,
+.schip:focus-visible,.dec-chips button:focus-visible,.au-toggle button:focus-visible,
+.au-cta:focus-visible,.au-guest:focus-visible,.st-cta:focus-visible,.st-actions button:focus-visible,
+.st-live:focus-visible,.op-cta:focus-visible,.op-actions button:focus-visible,
+.op-contact .cact button:focus-visible,.iconbtn:focus-visible,.ctrl button:focus-visible,
+.npside:focus-visible,.npplay:focus-visible,.pf-close:focus-visible,.bo-rec:focus-visible,
+.ep-play:focus-visible,#favBtn:focus-visible,.rowfav:focus-visible{outline-offset:3px;border-radius:999px}
+/* light ring where the surface itself is the red accent (red-on-red would vanish) */
+.nav-bcast:focus-visible,.op-tunerow button.hot:focus-visible,.st-live:focus-visible,
+.lplay:focus-visible,#offBanner:focus-visible{outline-color:#F5F4F2}
+/* inputs already shift their border on focus — add the ring on top for parity */
+.searchbox input:focus-visible,.au-field input:focus-visible,
+.sh-grid input:focus-visible,.sh-grid select:focus-visible,
+.bo-title input:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+/* range sliders: ring the thumb's track region */
+input[type=range]:focus-visible{outline:2px solid var(--signal);outline-offset:4px;border-radius:999px}
+@media (prefers-reduced-motion:reduce){
+  :where(a,button,input,select,textarea,[tabindex]):focus-visible{outline-offset:2px}
 }
-.ad-slot-dock{position:relative;z-index:5;margin-bottom:0}
-#castBtn{opacity:.85}
-#castBtn:disabled{opacity:.35}
-.theme-dark body,.theme-dark .app{/* map already has app-dark; global toggle */}
+/* ════ top bar — wordmark left · cast / search / avatar right (menu lives in the avatar) ════ */
+.hdr-actions{margin-left:auto;display:flex;align-items:center;gap:2px;flex:0 0 auto}
+.hdr-ic{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:#F5F4F2;cursor:pointer;display:grid;place-items:center;padding:0;transition:background .2s,transform .15s}
+.hdr-ic svg{width:22px;height:22px}
+.hdr-ic:hover{background:rgba(255,255,255,.08)}
+.hdr-ic:active{transform:scale(.9)}
+.hdr-ava{width:34px;height:34px;margin-left:8px;border-radius:50%;border:0;padding:0;cursor:pointer;flex:0 0 auto;
+  background:linear-gradient(140deg,#F6F5F3,#D7D6D2);color:#161616;display:grid;place-items:center;
+  font:800 14px 'Inter Tight',sans-serif;letter-spacing:-.01em;
+  box-shadow:0 0 0 1.5px rgba(245,244,242,.18),0 2px 6px rgba(0,0,0,.35);transition:transform .15s}
+.hdr-ava:active{transform:scale(.9)}
+.hdr-ic:focus-visible,.hdr-ava:focus-visible{outline-offset:3px;border-radius:999px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ════ broadcast moved inside the tab pill (overrides .nav-pill button) ════ */
+.nav-pill .nav-bcast{flex:0 0 auto;width:auto;height:auto;margin:0 1px;padding:14px;border-radius:999px;
+  background:radial-gradient(120% 120% at 30% 25%,#F0432F,#D2281A 60%,#B11F12);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 4px 12px rgba(208,40,26,.42)}
+.nav-pill .nav-bcast:hover{color:#fff}
+.nav-pill .nav-bcast.active{color:#161616;
+  background:#F5F4F2;
+  box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.nav-pill .nav-bcast svg{width:22px;height:22px}
+
+/* ════ profile photo (avatar image + camera badge) ════ */
+.pf-ava{cursor:pointer;overflow:hidden;position:relative}
+.pf-ava::after{content:"";position:absolute;right:0;bottom:0;width:20px;height:20px;border-radius:50%;
+  border:2px solid #1C1C1A;background:#E0301E url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4'%3E%3Cpath d='M4 8h3l1.5-2h7L17 8h3v11H4z'/%3E%3Ccircle cx='12' cy='13' r='3.2'/%3E%3C/svg%3E") center/11px no-repeat}
+.pf-ava img,.hdr-ava #hdrAva img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.hdr-ava{overflow:hidden}
+.hdr-ava #hdrAva{width:100%;height:100%;display:grid;place-items:center}
+/* ════ active tab shows its section name; reserved label width keeps the pill consistent ════ */
+.nav-pill button.active .nav-lbl>span{min-width:66px;text-align:center}
+/* ════ header stacks: logo+actions row, then On Air + station count below ════ */
+header{flex-direction:column;align-items:stretch;gap:8px}
+.hdr-row{display:flex;align-items:center;width:100%}
+.onair{margin-left:0;justify-content:flex-start}
+/* ════ Claim Frequency — availability chip ════ */
+.st-freqstatus{margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);vertical-align:middle}
+.st-freqstatus.taken{color:var(--danger);border-color:var(--danger)}
+
+/* ===== DARK MODE (additive; light theme untouched) ===== */
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--panel:#1d1d1b;--panel-2:#262623;--line:#2c2c2a;--cream:#ECEBE9;--muted:#8E8D8A}
+:root[data-theme="dark"] body{background:#121211}
+:root[data-theme="dark"] .app{background:#121211}
+:root[data-theme="dark"] .view{background:#121211}
+:root[data-theme="dark"] main{background:#121211}
+:root[data-theme="dark"] body{background:#232321}
+:root[data-theme="dark"] .brand h1 span{color:#8E8D8A}
+:root[data-theme="dark"] .eyebrow{color:#8E8D8A}
+:root[data-theme="dark"] .map-hint{color:#8E8D8A}
+:root[data-theme="dark"] .section-label .idx{color:#ECEBE9}
+:root[data-theme="dark"] .vol input[type=range]{background:#232321}
+:root[data-theme="dark"] .lcard{background:#1d1d1b}
+:root[data-theme="dark"] .gw-drop{background:#1d1d1b}
+:root[data-theme="dark"] .au-f{color:#8E8D8A}
+:root[data-theme="dark"] .au-eyebrow{color:#8E8D8A}
+:root[data-theme="dark"] .au-sub{color:#8E8D8A}
+:root[data-theme="dark"] .au-toggle button{color:#8E8D8A}
+:root[data-theme="dark"] .au-toggle button.on{background:#1d1d1b;color:#ECEBE9}
+:root[data-theme="dark"] .au-field label{color:#8E8D8A}
+:root[data-theme="dark"] .au-field input::placeholder{color:#ECEBE9}
+:root[data-theme="dark"] .au-welcome{color:#8E8D8A}
+:root[data-theme="dark"] .au-cta{background:#1d1d1b;color:#ECEBE9}
+:root[data-theme="dark"] .au-guest{color:#8E8D8A}
+:root[data-theme="dark"] .st-title{color:#ECEBE9}
+:root[data-theme="dark"] .st-title span{color:#8E8D8A}
+:root[data-theme="dark"] .st-sub{color:#8E8D8A}
+:root[data-theme="dark"] .st-form .au-field label{color:#8E8D8A}
+:root[data-theme="dark"] .st-form .au-field input[type=text]{background:#1d1d1b;border-color:#2c2c2a;color:#ECEBE9}
+:root[data-theme="dark"] .st-freqview{color:#ECEBE9}
+:root[data-theme="dark"] .st-freqview i{color:#8E8D8A}
+:root[data-theme="dark"] #stFreq::-moz-range-track{background:#232321}
+:root[data-theme="dark"] .st-cancel{color:#8E8D8A}
+:root[data-theme="dark"] .st-call{color:#8E8D8A}
+:root[data-theme="dark"] .st-freq span{color:#8E8D8A}
+:root[data-theme="dark"] .st-tagline{color:#8E8D8A}
+:root[data-theme="dark"] .st-status{color:#8E8D8A}
+:root[data-theme="dark"] .st-actions button:hover{border-color:#2c2c2a}
+:root[data-theme="dark"] .sh-dot{background:#232321}
+:root[data-theme="dark"] .sh-title{color:#ECEBE9}
+:root[data-theme="dark"] .sh-meta{color:#8E8D8A}
+:root[data-theme="dark"] .sh-days button{border:1px solid #2c2c2a;background:#1d1d1b;color:#8E8D8A}
+:root[data-theme="dark"] .sh-grid input,.sh-grid select{background:#1d1d1b;border:1px solid #2c2c2a;color:#ECEBE9}
+:root[data-theme="dark"] .sh-empty{color:#8E8D8A}
+:root[data-theme="dark"] .bo-state{color:#8E8D8A}
+:root[data-theme="dark"] .bo-title input::placeholder{color:#ECEBE9}
+:root[data-theme="dark"] .ep-title{color:#ECEBE9}
+:root[data-theme="dark"] .ep-meta{color:#8E8D8A}
+:root[data-theme="dark"] .menu-btn:hover{border-color:#2c2c2a}
+:root[data-theme="dark"] .pf-close:hover{border-color:#2c2c2a}
+:root[data-theme="dark"] .pf-ava{background:#1d1d1b;color:#ECEBE9}
+:root[data-theme="dark"] .pf-mail{color:#8E8D8A}
+:root[data-theme="dark"] .pf-sec{color:#8E8D8A}
+:root[data-theme="dark"] .pf-row span{color:#8E8D8A}
+:root[data-theme="dark"] .pf-foot{color:#ECEBE9}
+:root[data-theme="dark"] .own-badge{color:#ECEBE9}
+:root[data-theme="dark"] .dec-chips button{background:#1d1d1b;color:#ECEBE9}
+:root[data-theme="dark"] .dec-chips button .yr{color:#8E8D8A}
+:root[data-theme="dark"] .dec-chips button.on .yr{color:#8E8D8A}
+:root[data-theme="dark"] .dec-hint{color:#8E8D8A}
+:root[data-theme="dark"] .cr-pro{color:#ECEBE9}
+:root[data-theme="dark"] .npside{background:#1d1d1b;color:#ECEBE9}
+:root[data-theme="dark"] .hint{color:#8E8D8A}
+:root[data-theme="dark"] .vtoggle{background:#232321}
+:root[data-theme="dark"] .lrow{background:#1d1d1b}
+:root[data-theme="dark"] .lrow:hover{background:#1d1d1b}
+:root[data-theme="dark"] .lrow .lname{color:#ECEBE9}
+:root[data-theme="dark"] .lrow .lcount{color:#8E8D8A}
+:root[data-theme="dark"] .lrow:hover .larrow{color:#ECEBE9}
+:root[data-theme="dark"] .lrow .lcode{color:#8E8D8A}
+:root[data-theme="dark"] .leaflet-popup-content-wrapper{background:#1d1d1b}
+:root[data-theme="dark"] .leaflet-popup-tip{background:#1d1d1b}
+:root[data-theme="dark"] .lpop strong{color:#ECEBE9}
+:root[data-theme="dark"] #mapview.map-dark .map-hint{color:#8E8D8A}
+:root[data-theme="dark"] #mapview.map-dark #discToggle button{color:#8E8D8A}
+:root[data-theme="dark"] #mapview.map-dark #discToggle button.on{background:#1d1d1b;color:#ECEBE9}
+:root[data-theme="dark"] .em-status{color:#8E8D8A}
+:root[data-theme="dark"] .em-h span{color:#8E8D8A}
+:root[data-theme="dark"] .em-p{color:#8E8D8A}
+:root[data-theme="dark"] .em-sec{color:#8E8D8A}
+:root[data-theme="dark"] .em-val{color:#8E8D8A}
+:root[data-theme="dark"] .em-del{color:#8E8D8A}
+:root[data-theme="dark"] .em-del:hover{color:#8E8D8A}
+:root[data-theme="dark"] .em-empty{color:#8E8D8A}
+:root[data-theme="dark"] .em-add{color:#8E8D8A}
+:root[data-theme="dark"] .em-add:hover{color:#8E8D8A}
+:root[data-theme="dark"] .em-check li::before{color:#8E8D8A}
+:root[data-theme="dark"] #authScr .au-f,#authScr .au-toggle button:not(.on),.st-card .st-tagline,.st-card .st-call,.st-card .st-freq span,.st-card .st-freqview i,.bo-wrap .bo-state,#profScr .pf-row span,#profScr .pf-mail,#profScr .au-eyebrow,.dec-chips button.on .yr,#mapview.map-dark .map-hint,#netFit{color:#8E8D8A}
+:root[data-theme="dark"] .st-sub{color:#8E8D8A}
+
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:360px){
+  :root{--gutter:15px}
+  .nav-pill{padding:7px 9px}
+  .nav-pill button.active{padding:12px 13px}
+  .nav-pill .nav-bcast{padding:12px}
+  .nav-pill button svg{width:21px;height:21px}
+  .section-label{letter-spacing:.1em;font-size:12px}
+}
+/* ===== NOW PLAYING (.dialscr): keep the light look, ensure legibility in dark mode ===== */
+:root[data-theme="dark"] .dialscr{--bg:#E7E6E3;--panel:#FFFFFF;--panel-2:#F5F4F2;--line:#DEDDD9;--cream:#1A1A1A;--muted:#646360}
+:root[data-theme="dark"] .dialscr .np-name{color:#1A1A1A}
+:root[data-theme="dark"] .dialscr .hint{color:#9C9B98}
+:root[data-theme="dark"] .dialscr .vol input[type=range]{background:#D8D7D4}
+:root[data-theme="dark"] .dialscr input[type=range]::-webkit-slider-thumb{background:#1A1A1A}
+:root[data-theme="dark"] .dialscr input[type=range]::-moz-range-thumb{background:#1A1A1A;border:0}
+
+/* ===== Speckit / app additions ===== */
+.ad-slot{display:none}
+.ad-slot.is-mounted{display:block}
+.ad-slot-dock{position:absolute;left:10px;right:10px;bottom:calc(var(--nav-h) + var(--dock-h) + 20px);z-index:49;min-height:50px;border-radius:12px;overflow:hidden;background:rgba(0,0,0,.06)}
+.ad-slot-explore{margin:16px 0;min-height:90px;border-radius:16px;overflow:hidden;background:rgba(0,0,0,.04)}
+.offline-banner{position:absolute;top:0;left:0;right:0;z-index:900;padding:10px 16px;background:#161616;color:#F5F4F2;font:12px/1.4 Inter,sans-serif;text-align:center}
+.offline-banner[hidden]{display:none!important}
+:root[data-theme="dark"] .ad-slot-dock,:root[data-theme="dark"] .ad-slot-explore{background:rgba(255,255,255,.06)}

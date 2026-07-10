@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <link rel="stylesheet" href="/src/styles/main.css">
@@ -45,24 +45,29 @@
         <div class="pf-mail" id="pfMail">—</div>
       </div>
     </div>
+    <div class="pf-sec">Appearance</div>
+    <div class="pf-rows">
+      <button class="pf-row pf-switch" id="pfDark" type="button" role="switch" aria-checked="false">Dark mode<span class="pf-sw"><i></i></span></button>
+    </div>
     <div class="pf-sec">Account</div>
     <div class="pf-rows">
-      <button class="pf-row" id="themeToggle" type="button">Toggle dark mode<span>&rsaquo;</span></button>
-      <button class="pf-row" id="pfRename">Edit display name<span>&rsaquo;</span></button>
+      <button class="pf-row" id="pfPhotoBtn" type="button">Change photo<span>&rsaquo;</span></button>
+      <button class="pf-row" id="pfRename" type="button">Edit display name<span>&rsaquo;</span></button>
     </div>
-    <div class="pf-sec">Data</div>
-    <div class="pf-rows">
-      <button class="pf-row" id="pfClearLib">Clear favourites &amp; recents<span>&rsaquo;</span></button>
-      <button class="pf-row" id="pfReset">Reset everything<span>&rsaquo;</span></button>
-    </div>
-    <div class="pf-sec">Session</div>
-    <div class="pf-rows">
-      <button class="pf-row pf-out" id="pfOut">Sign out<span>&rsaquo;</span></button>
-    </div>
+    <input type="file" id="pfPhoto" accept="image/*" hidden>
     <div class="pf-sec">Premium</div>
     <div class="pf-rows">
       <button class="pf-row" id="upgradeBtn" type="button">Go ad-free<span>&rsaquo;</span></button>
       <button class="pf-row" id="manageSubBtn" type="button" hidden>Manage subscription<span>&rsaquo;</span></button>
+    </div>
+    <div class="pf-sec">Data</div>
+    <div class="pf-rows">
+      <button class="pf-row" id="pfClearLib" type="button">Clear favourites &amp; recents<span>&rsaquo;</span></button>
+      <button class="pf-row" id="pfReset" type="button">Reset everything<span>&rsaquo;</span></button>
+    </div>
+    <div class="pf-sec">Session</div>
+    <div class="pf-rows">
+      <button class="pf-row pf-out" id="pfOut" type="button">Sign out<span>&rsaquo;</span></button>
     </div>
     <div class="pf-foot">The Dome &middot; World Radio Atlas &middot; prototype</div>
   </div>
@@ -114,23 +119,33 @@
     </span>
   </div>
 
-  <header>
-    <button class="menu-btn" id="profBtn" aria-label="Menu">
-      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-    </button>
+    <header>
+    <div class="hdr-row">
     <div class="brand">
       <img class="brand-logo" src="/assets/logo.svg" alt="The Dome Radio" width="1227" height="301">
-      <div class="onair"><i></i><span id="statCount">tuning…</span></div>
     </div>
-    <div class="header-spacer"></div>
+    <div class="hdr-actions">
+      <button class="hdr-ic" id="castBtn" aria-label="Cast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16.1A5 5 0 0 1 5.9 20"/><path d="M2 12.05A9 9 0 0 1 9.95 20"/><path d="M2 20h.01"/><path d="M2 8.82V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5.18"/></svg>
+      </button>
+      <button class="hdr-ic" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 22L17 17M19 10.5C19 15.1944 15.1944 19 10.5 19C5.80558 19 2 15.1944 2 10.5C2 5.80558 5.80558 2 10.5 2C15.1944 2 19 5.80558 19 10.5Z"/></svg>
+      </button>
+      <button class="hdr-ava" id="profBtn" aria-label="Profile and menu" aria-haspopup="menu">
+        <span id="hdrAva">·</span>
+      </button>
+    </div>
+    </div>
+    <div class="onair"><i></i><span id="statCount" aria-live="polite">tuning…</span></div>
   </header>
 
   <nav role="tablist">
-    <button class="active" data-view="explore" role="tab">Explore</button>
-    <button data-view="map" role="tab">Discover</button>
-    <button data-view="search" role="tab">Search</button>
-    <button data-view="library" role="tab">Library</button>
-    <button data-view="creator" role="tab" hidden>Creator <span class="nav-pro">PRO</span></button>
+    <div class="nav-pill">
+      <button class="active" data-view="explore" role="tab" aria-label="Explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/><path d="M10 14L8 7.99998L14 9.99998L16 16L10 14Z"/></svg><span class="nav-lbl"><span>Explore</span></span></button>
+      <button data-view="map" role="tab" aria-label="Discover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 22L12.3491 19.5565C12.4385 18.9304 12.9304 18.4385 13.5565 18.3491C14.9586 18.1488 16 16.948 16 15.5317V15.2995C16 14.1981 17.1124 13.445 18.135 13.854L21 15M4 18L6.14143 17.5717C7.62027 17.2759 8.45882 15.7012 7.87878 14.3091C7.22287 12.7349 8.37945 11 10.0848 11H11C12.6569 11 14 9.65685 14 8V7.90983C14 6.73936 13.3387 5.66935 12.2918 5.1459L8 3"/></svg><span class="nav-lbl"><span>Discover</span></span></button>
+      <button data-view="library" role="tab" aria-label="Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.71573 4.68905C6.00337 2.43698 9.71236 2.43698 12 4.68905C14.2876 2.43698 17.9966 2.43698 20.2843 4.68905C22.5719 6.94113 22.5719 10.5925 20.2843 12.8445L12 21L3.71573 12.8445C1.42809 10.5925 1.42809 6.94113 3.71573 4.68905Z"/></svg><span class="nav-lbl"><span>Library</span></span></button>
+      <button class="nav-bcast" data-view="creator" hidden role="tab" aria-label="Broadcast"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.1075 18.9897L11.1598 17.9911H11.1598L11.1075 18.9897ZM4.01028 11.8925L5.00891 11.8402L4.01028 11.8925ZM19.9897 11.8925L18.9911 11.8402V11.8402L19.9897 11.8925ZM12.8925 18.9897L12.8402 17.9911H12.8402L12.8925 18.9897ZM15 6V11H17V6H15ZM9 11V6H7V11H9ZM12 14C10.3431 14 9 12.6569 9 11H7C7 13.7614 9.23858 16 12 16V14ZM15 11C15 12.6569 13.6569 14 12 14V16C14.7614 16 17 13.7614 17 11H15ZM12 3C13.6569 3 15 4.34315 15 6H17C17 3.23858 14.7614 1 12 1V3ZM12 1C9.23858 1 7 3.23858 7 6H9C9 4.34315 10.3431 3 12 3V1ZM19 10V11H21V10H19ZM5 11V10H3V11H5ZM12 18C11.5231 18 11.3232 17.9997 11.1598 17.9911L11.0551 19.9883C11.284 20.0003 11.5484 20 12 20V18ZM3 11C3 11.4516 2.99965 11.716 3.01165 11.9449L5.00891 11.8402C5.00035 11.6768 5 11.4769 5 11H3ZM11.1598 17.9911C7.83755 17.817 5.18302 15.1624 5.00891 11.8402L3.01165 11.9449C3.23933 16.2894 6.71065 19.7607 11.0551 19.9883L11.1598 17.9911ZM19 11C19 11.4769 18.9997 11.6768 18.9911 11.8402L20.9883 11.9449C21.0003 11.716 21 11.4516 21 11H19ZM12 20C12.4516 20 12.716 20.0003 12.9449 19.9883L12.8402 17.9911C12.6768 17.9997 12.4769 18 12 18V20ZM18.9911 11.8402C18.817 15.1624 16.1624 17.817 12.8402 17.9911L12.9449 19.9883C17.2894 19.7607 20.7607 16.2894 20.9883 11.9449L18.9911 11.8402ZM11 19V23H13V19H11Z"/></svg><span class="nav-lbl"><span>Broadcast</span></span></button>
+    </div>
   </nav>
 
   <main>
@@ -271,7 +286,7 @@
     </section>
   </main>
 
-  <!-- PLAYER DOCK -->
+    <!-- PLAYER DOCK -->
   <div class="ad-slot ad-slot-dock" data-ad-slot="dock" hidden aria-hidden="true"></div>
   <div class="dock" id="dock">
     <div class="dial">
@@ -288,10 +303,9 @@
       <div class="vu"><i></i><i></i><i></i><i></i></div>
       <div class="ctrl">
         <button id="favBtn" aria-label="Save to favourites" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 20.5C12 20.5 4 15.2 4 9.7 4 7.1 6 5.2 8.4 5.2c1.6 0 2.8.8 3.6 2.1.8-1.3 2-2.1 3.6-2.1C18 5.2 20 7.1 20 9.7c0 5.5-8 10.8-8 10.8z"/></svg></button>
-        <button id="prevBtn" aria-label="Previous station"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6v12L9.5 12z"/></svg></button>
+        <button id="prevBtn" aria-label="Previous station"><svg viewBox="0 0 24 24"><path d="M6 5h2.5v14H6V5Zm4 7 9-6.5v13L10 12Z"/></svg></button>
         <button class="play" id="playBtn" aria-label="Play / pause"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-        <button id="castBtn" aria-label="Cast" title="Cast"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 17v2h2c0-1.1-.9-2-2-2zm0-4v2c2.21 0 4 1.79 4 4h2c0-3.31-2.69-6-6-6zm0-4v2c4.42 0 8 3.58 8 8h2c0-5.52-4.48-10-10-10zm16-4H5c-1.1 0-2 .9-2 2v2h2V7h14v10h-5v2h5c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z"/></svg></button>
-        <button id="nextBtn" aria-label="Next station"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+        <button id="nextBtn" aria-label="Next station"><svg viewBox="0 0 24 24"><path d="M15.5 5H18v14h-2.5V5ZM5 5.5l9 6.5-9 6.5v-13Z"/></svg></button>
       </div>
     </div>
   </div>
@@ -306,21 +320,22 @@
       <button class="iconbtn" id="dialClose" aria-label="Close">✕</button>
     </div>
     <div class="np-info">
-      <div class="np-art" id="npArt">◍</div>
+      <div class="np-art"><div class="np-art-fill" id="npArt">◍</div><div class="np-wave" id="npwave"></div></div>
       <div class="np-name" id="npName">—</div>
       <div class="np-freq" id="npFreq"><b>—·—</b><span> MHz</span></div>
       <div class="np-meta" id="npMeta"></div>
       <div class="np-state" id="npState">pick a station</div>
     </div>
     <div class="np-controls">
-      <button class="npbtn npside" id="npPrev" aria-label="Previous station"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6v12L9.5 12z"/></svg></button>
+      <button class="npbtn npside" id="npPrev" aria-label="Previous station"><svg viewBox="0 0 24 24"><path d="M6 5h2.5v14H6V5Zm4 7 9-6.5v13L10 12Z"/></svg></button>
       <button class="npbtn npplay" id="npPlay" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path id="npPlayIcon" d="M8 5v14l11-7z"/></svg></button>
-      <button class="npbtn npside" id="npNext" aria-label="Next station"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+      <button class="npbtn npside" id="npNext" aria-label="Next station"><svg viewBox="0 0 24 24"><path d="M15.5 5H18v14h-2.5V5ZM5 5.5l9 6.5-9 6.5v-13Z"/></svg></button>
     </div>
     <div class="np-extras">
       <div class="vol">
-        <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.6a4.4 4.4 0 0 1 0 6.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg class="vic" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16.5 9.8 20.2 13.5M20.2 9.8l-3.7 3.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <input type="range" id="volRange" min="0" max="100" value="100" aria-label="Volume">
+        <svg class="vic" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3Z"/><path d="M15.5 8.4c1 1 1.5 2.2 1.5 3.6s-.5 2.6-1.5 3.6M18.1 5.9c1.8 1.7 2.8 3.7 2.8 6.1s-1 4.4-2.8 6.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </div>
       <div class="sleep">
         <span class="slabel">Sleep</span>
@@ -336,8 +351,7 @@
         <circle cx="300" cy="340" r="306" fill="#FFFFFF" stroke="#E3E2E0" stroke-width="1"/>
         <circle cx="300" cy="340" r="297" fill="none" stroke="#C9C8C5" stroke-width="5" stroke-dasharray="1.6 10.4" opacity=".5"/>
         <g id="dialSegs"></g>
-        <line x1="300" y1="12" x2="300" y2="62" stroke="#E0301E" stroke-width="2.5" stroke-linecap="round"
-              style="filter:drop-shadow(0 0 5px rgba(224,48,30,.55))"/>
+        <line x1="300" y1="12" x2="300" y2="62" stroke="#E0301E" stroke-width="2.5" stroke-linecap="round" style="filter:drop-shadow(0 0 5px rgba(224,48,30,.55))"/>
       </svg>
     </div>
   </div>

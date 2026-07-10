@@ -36,7 +36,7 @@ function metaLine(st){
   const parts=[st.countrycode?flag(st.countrycode):'', st.country||'', st.codec?st.codec.toUpperCase():''].filter(Boolean);
   return parts.join(' · ');
 }
-function stationCard(st,i,row=false){
+function stationCard(st,i,_row=false){
   return `<div class="station" data-i="${i}" data-uuid="${esc(st.stationuuid)}" style="animation-delay:${Math.min(i*35,420)}ms">
     <div class="art">${artHTML(st)}</div>
     <div class="txt">
@@ -217,28 +217,63 @@ audio.addEventListener('playing',()=>{ state.playing=true; refreshPlayUI(); if(s
 
 /* =================== Tabs =================== */
 let mapBuilt=false;
+
+function activateView(view){
+  const viewId = view === 'map' ? 'mapview' : view;
+  document.querySelectorAll('nav button').forEach(x=>{
+    const on = x.dataset.view === view;
+    x.classList.toggle('active', on);
+    x.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el = document.getElementById(viewId);
+  if (el) el.classList.add('active');
+  if(view==='map'){
+    if(mapMode==='web'){
+      if(!mapBuilt) buildMap();
+      else setTimeout(sizeNet,60);
+      GRAPH.active=true;
+    } else {
+      GRAPH.active=false;
+      if(leafMap) setTimeout(()=>leafMap.invalidateSize(),60);
+    }
+  } else GRAPH.active=false;
+  $('#app').classList.toggle('app-dark', view==='map' && mapMode==='map');
+  if(view==='library') renderLibrary();
+  if(view==='creator' && window.initCreator) window.initCreator();
+}
+
 document.querySelectorAll('nav button').forEach(b=>{
   b.addEventListener('click',()=>{
-    document.querySelectorAll('nav button').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-selected','false');});
-    b.classList.add('active'); b.setAttribute('aria-selected','true');
-    b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    $('#'+ (b.dataset.view==='map'?'mapview':b.dataset.view)).classList.add('active');
-    if(b.dataset.view==='map'){
-      if(mapMode==='web'){
-        if(!mapBuilt) buildMap();
-        else setTimeout(sizeNet,60);
-        GRAPH.active=true;
-      } else {
-        GRAPH.active=false;
-        if(leafMap) setTimeout(()=>leafMap.invalidateSize(),60);
-      }
-    } else GRAPH.active=false;
-    $('#app').classList.toggle('app-dark', b.dataset.view==='map' && mapMode==='map');
-    if(b.dataset.view==='library') renderLibrary();
-    if(b.dataset.view==='creator' && window.initCreator) initCreator();
+    if (b.hidden) return;
+    activateView(b.dataset.view);
   });
 });
+
+const searchBtn = $('#searchBtn');
+if (searchBtn) {
+  searchBtn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(x=>{
+      x.classList.remove('active');
+      x.setAttribute('aria-selected','false');
+    });
+    activateView('search');
+    const inp = $('#search .searchbox input') || $('#search input');
+    if (inp) setTimeout(() => { try { inp.focus(); } catch { /* ignore */ } }, 160);
+  });
+}
+
+/* waveform bars in Now Playing art */
+(function initNpWave(){
+  const wf = document.getElementById('npwave');
+  if (!wf || wf.childElementCount) return;
+  [13,22,15,36,19,29,43,17,25,38,14,32,47,21,13,34,27,45,18,30,41,16,25,35,14,39,22,32,46,15,26,37,19,30,13,23,34,17,42,20,14,31,38,16,25,13]
+    .forEach((h) => {
+      const b = document.createElement('span');
+      b.style.height = h + 'px';
+      wf.appendChild(b);
+    });
+})();
 
 /* =================== Explore =================== */
 async function loadStats(){
@@ -349,7 +384,6 @@ const GENRE_CARDS=[
   {tag:'techno', img:TECHNO_IMG, bg:'#424F56', ink:'#F2F1EF', code:'108.0 FM'}
 ];
 const TAGS=['news','ambient','hiphop','reggae','salsa','fado','country','funk','disco','metal'];
-let tagList=[];
 let genreCountCache={};
 async function loadGenreCounts(){
   const slots=document.querySelectorAll('.lcount[data-count]');
@@ -369,7 +403,7 @@ async function loadGenreCounts(){
       }
       genreCountCache[tag]=n;
       setCount(el, n);
-    }catch(e){ el.textContent='—'; }
+    }catch{ el.textContent='—'; }
   }));
 }
 function setCount(el, n){
@@ -435,7 +469,6 @@ $('#exBack').addEventListener('click',()=>{
 });
 function renderResults(list,empty){
   const box=$('#tagResults');
-  tagList=list;
   box.innerHTML = list.length ? list.map((s,i)=>stationCard(s,i,true)).join('') : `<div class="status">${empty}</div>`;
   bindCards(box, list); markPlaying();
 }
@@ -465,7 +498,7 @@ document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>loa
 /* ---- moods (multi-tag blends) ---- */
 const MOODS=[
   {id:'chill',   tags:['chillout','lounge','downtempo'],   bg:'#E9E8E5', ink:'#161616', tone:'#3F3B3B', ac:'#E0301E',
-   mini:(t,a,b)=>`<path d="M7 16.5 A7.5 7.5 0 0 1 21 16.5" fill="none" stroke="${t}" stroke-width="3" stroke-linecap="round"/><rect x="4.5" y="15" width="5.5" height="8.5" rx="2.75" fill="${t}"/><rect x="18" y="15" width="5.5" height="8.5" rx="2.75" fill="${a}"/>`},
+   mini:(t,a)=>`<path d="M7 16.5 A7.5 7.5 0 0 1 21 16.5" fill="none" stroke="${t}" stroke-width="3" stroke-linecap="round"/><rect x="4.5" y="15" width="5.5" height="8.5" rx="2.75" fill="${t}"/><rect x="18" y="15" width="5.5" height="8.5" rx="2.75" fill="${a}"/>`},
   {id:'focus',   tags:['classical','piano','instrumental'],bg:'#C9C8C5', ink:'#161616', tone:'#3A3A38', ac:'#E0301E',
    mini:(t,a)=>`<path d="M14 3.5 L21.5 24 H6.5 Z" fill="${t}"/><line x1="14" y1="21" x2="20.5" y2="7.5" stroke="${a}" stroke-width="2.6" stroke-linecap="round"/>`},
   {id:'energy',  tags:['dance','edm','workout'],           bg:'#161616', ink:'#F2F1EF', tone:'#8A8985', ac:'#E0301E',
@@ -1271,7 +1304,7 @@ loadStats(); loadTrending(); loadCountries(); loadLanguages();
   /* bypass de desarrollo: abrir con #skip entra como guest sin llenar nada */
   if(location.hash.toLowerCase().includes('skip')){
     store.set('user', { name:'Guest', email:null, guest:true });
-    if(window.updateProfileUI) updateProfileUI();
+    updateProfileUI();
     scr.remove(); return;
   }
   if(u0){ scr.remove(); return; }
@@ -1298,7 +1331,7 @@ loadStats(); loadTrending(); loadCountries(); loadLanguages();
 
   function finish(u){
     store.set('user', u);
-    if(window.updateProfileUI) updateProfileUI();
+    updateProfileUI();
     scr.classList.add('hide');
     setTimeout(()=>scr.remove(), 550);
   }
@@ -1331,10 +1364,14 @@ loadStats(); loadTrending(); loadCountries(); loadLanguages();
 })();
 
 /* ════ profile (must boot with main app — not Creator-only) ════ */
-window.updateProfileUI = function(){
+function updateProfileUI(){
   const u = store.get('user', null);
   const ini = u ? (u.name||'?').trim().charAt(0).toUpperCase() : '·';
-  $('#pfAva').textContent = ini;
+  const photo = u && u.photo ? u.photo : null;
+  const ava = photo ? `<img src="${photo}" alt="">` : ini;
+  $('#pfAva').innerHTML = ava;
+  const hdrAva = $('#hdrAva');
+  if (hdrAva) hdrAva.innerHTML = ava;
   $('#pfName').textContent = u ? u.name : 'Not signed in';
   $('#pfMail').textContent = u ? (u.guest ? 'Guest session' : u.email) : '—';
   const premium = (() => {
@@ -1348,7 +1385,8 @@ window.updateProfileUI = function(){
   const manage = $('#manageSubBtn');
   if (upgrade) upgrade.hidden = !!premium;
   if (manage) manage.hidden = !premium;
-};
+}
+window.updateProfileUI = updateProfileUI;
 (function initProfileSheet(){
   const scr = $('#profScr');
   if (!scr || !$('#profBtn')) return;
@@ -1359,6 +1397,41 @@ window.updateProfileUI = function(){
     const name = prompt('Display name', u.name);
     if(name && name.trim()){ u.name = name.trim().slice(0,24); store.set('user', u); updateProfileUI(); }
   };
+  const photoInp = $('#pfPhoto');
+  const photoBtn = $('#pfPhotoBtn');
+  const pfAva = $('#pfAva');
+  const pickPhoto = () => { if (photoInp) photoInp.click(); };
+  if (photoBtn) photoBtn.addEventListener('click', pickPhoto);
+  if (pfAva) pfAva.addEventListener('click', pickPhoto);
+  if (photoInp) {
+    photoInp.addEventListener('change', () => {
+      const f = photoInp.files && photoInp.files[0];
+      if (!f) return;
+      const rd = new FileReader();
+      rd.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const S = 256;
+          const c = document.createElement('canvas');
+          c.width = S; c.height = S;
+          const x = c.getContext('2d');
+          const s = Math.min(img.width, img.height);
+          const sx = (img.width - s) / 2;
+          const sy = (img.height - s) / 2;
+          x.drawImage(img, sx, sy, s, s, 0, 0, S, S);
+          let data;
+          try { data = c.toDataURL('image/jpeg', 0.85); } catch { return; }
+          const u = store.get('user', null) || { name: 'Guest', guest: true };
+          u.photo = data;
+          store.set('user', u);
+          updateProfileUI();
+        };
+        img.src = rd.result;
+      };
+      rd.readAsDataURL(f);
+      photoInp.value = '';
+    });
+  }
   $('#pfClearLib').onclick = ()=>{
     if(!confirm('Clear all favourites and recents?')) return;
     favs = []; recents = [];
