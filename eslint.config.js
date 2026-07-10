@@ -13,6 +13,7 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+        L: 'readonly', // Leaflet CDN global
       },
     },
     rules: {
