@@ -3,7 +3,6 @@ import { initTheme } from './theme.js';
 import { initOfflineBanner } from './offline.js';
 import { registerServiceWorker } from './pwa.js';
 import { mountAdSlots, teardownAdSlots, shouldShowAds } from './ads/ads.js';
-import { isPremium } from './api/premium.js';
 import { initSupabaseAuth } from './api/supabase.js';
 import { createCastController } from './cast/cast-controller.js';
 import { store } from './store.js';
@@ -44,10 +43,11 @@ async function boot() {
 
   function refreshAds() {
     const profile = store.get('profile', null);
-    if (shouldShowAds(profile) && !isPremium(profile)) mountAdSlots(['dock', 'explore-inline']);
+    if (shouldShowAds(profile)) mountAdSlots(['dock', 'explore-inline']);
     else teardownAdSlots();
   }
-  refreshAds();
+  // Defer one frame so Explore markup is in the DOM after app.js boot
+  requestAnimationFrame(refreshAds);
 
   initSupabaseAuth({ onProfile: refreshAds }).catch(() => {});
 
