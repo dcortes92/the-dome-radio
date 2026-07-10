@@ -96,9 +96,9 @@ A registered user with an active paid entitlement listens without ads. Other pai
 
 Guests and registered users can send the current station's audio to a compatible cast/target device in the environment.
 
-**Why this priority**: Casting is an existing prototype capability and a shared expectation for both guest and registered listeners.
+**Why this priority**: Casting to speakers/TVs is an expected listener capability for both guests and registered users (Chromecast + AirPlay in v1).
 
-**Independent Test**: From a guest session and a registered session, start a station, initiate cast to a compatible device, confirm audio plays on the target, and stop/disconnect cleanly.
+**Independent Test**: From a guest session and a registered session, start a station, cast to a Chromecast or AirPlay target, confirm audio plays on the target, switch station if supported, and stop/disconnect cleanly.
 
 **Acceptance Scenarios**:
 
@@ -191,13 +191,13 @@ Listeners can use dark mode (already present in the prototype) so the atlas UI r
 
 ## Assumptions
 
-- A working prototype already delivers core streaming, PWA basics, dark mode, and casting; this specification re-baselines product behavior rather than inventing those capabilities from scratch.
+- A working prototype already delivers core streaming, PWA basics, dark mode, and MediaSession remotes; this specification re-baselines product behavior. **Chromecast and AirPlay casting are in scope for v1** even though they are not implemented in the prototype yet (stakeholder decision 2026-07-09).
 - Station catalog content exists (or will continue to be supplied) so listeners have stations to browse; catalog curation tooling is out of scope unless required to meet listening scenarios.
 - "Paid registered user" means a registered account with an active paid entitlement; payment provider UX and plan catalog beyond "paid = ad-free" are deferred to a later specification.
 - Additional paid perks beyond skipping ads are explicitly out of scope for this feature until separately defined.
 - Free-tier ads apply equally to guests and free registered users; exact creative partner and fill strategy may be chosen in planning as long as FR-007/FR-008 and related success criteria hold.
 - Ad timing defaults to: free listeners may see ads at session/playback boundaries and at reasonable intervals during continuous listening, without making registration mandatory to hear audio.
-- Casting targets are those already supported (or intended) by the prototype's cast capability; expanding to every possible ecosystem is not required for this spec's success.
+- Casting targets for v1 are **Google Cast (Chromecast / Cast-enabled TVs)** and **AirPlay** where the browser/OS exposes them. AirPlay is not required from non-Apple browsers. Expanding to every smart-TV SDK is not required. MediaSession remains for local device remotes and does not by itself satisfy cast scenarios.
 - Appearance preference defaults to preserving current prototype behavior (explicit toggle and/or system preference).
 - Account recovery, social login providers, and parental controls follow common consumer-app defaults and can be detailed in planning without blocking this spec.
 - Live radio requires network connectivity; offline mode covers app shell and clear messaging, not offline playback of live stations.
