@@ -1330,8 +1330,94 @@ loadStats(); loadTrending(); loadCountries(); loadLanguages();
   $('#auGuest').onclick = ()=>finish({ name:'Guest', email:null, guest:true });
 })();
 
+/* ════ profile (must boot with main app — not Creator-only) ════ */
+window.updateProfileUI = function(){
+  const u = store.get('user', null);
+  const ini = u ? (u.name||'?').trim().charAt(0).toUpperCase() : '·';
+  $('#pfAva').textContent = ini;
+  $('#pfName').textContent = u ? u.name : 'Not signed in';
+  $('#pfMail').textContent = u ? (u.guest ? 'Guest session' : u.email) : '—';
+  const premium = (() => {
+    try {
+      const p = store.get('profile', null);
+      return p?.subscription_status === 'active' ||
+        (p?.premium_until && new Date(p.premium_until) > new Date());
+    } catch { return false; }
+  })();
+  const upgrade = $('#upgradeBtn');
+  const manage = $('#manageSubBtn');
+  if (upgrade) upgrade.hidden = !!premium;
+  if (manage) manage.hidden = !premium;
+};
+(function initProfileSheet(){
+  const scr = $('#profScr');
+  if (!scr || !$('#profBtn')) return;
+  $('#profBtn').onclick = ()=>{ updateProfileUI(); scr.hidden = false; };
+  $('#pfClose').onclick = ()=>{ scr.hidden = true; };
+  $('#pfRename').onclick = ()=>{
+    const u = store.get('user', null); if(!u) return;
+    const name = prompt('Display name', u.name);
+    if(name && name.trim()){ u.name = name.trim().slice(0,24); store.set('user', u); updateProfileUI(); }
+  };
+  $('#pfClearLib').onclick = ()=>{
+    if(!confirm('Clear all favourites and recents?')) return;
+    favs = []; recents = [];
+    store.set('favs', favs); store.set('recents', recents);
+    renderLibrary();
+    updateFavUI();
+  };
+  $('#pfReset').onclick = ()=>{
+    if(!confirm('Reset everything? Account, library, station and tapes will be wiped.')) return;
+    try{ Object.keys(localStorage).filter(k=>k.startsWith('dome:')).forEach(k=>localStorage.removeItem(k)); }catch{}
+    try{ indexedDB.deleteDatabase('dome-studio'); }catch{}
+    location.reload();
+  };
+  $('#pfOut').onclick = ()=>{
+    store.set('user', null);
+    import('./api/supabase.js').then((m) => m.signOut?.()).catch(() => {});
+    location.reload();
+  };
+  updateProfileUI();
+})();
 
-
+/* ════ decades (Discover) — was stranded in Creator legacy ════ */
+let decBuilt=false, decActiveTag=null;
+const DECADES=[
+  {label:'50s', yr:'1950s', tags:['50s','oldies','rock and roll','doo wop']},
+  {label:'60s', yr:'1960s', tags:['60s','oldies','classic rock','soul']},
+  {label:'70s', yr:'1970s', tags:['70s','classic rock','disco','funk']},
+  {label:'80s', yr:'1980s', tags:['80s','new wave','synthpop']},
+  {label:'90s', yr:'1990s', tags:['90s','grunge','eurodance']}
+];
+function initDecades(){
+  decBuilt=true;
+  $('#decChips').innerHTML = DECADES.map(d=>
+    `<button data-dec="${d.label}">${d.label}<span class="yr">${d.yr}</span></button>`).join('');
+  $('#decChips').querySelectorAll('button').forEach(b=>
+    b.addEventListener('click',()=>{ decClose(); loadDecade(b.dataset.dec, b); }));
+}
+async function loadDecade(label){
+  const dec=DECADES.find(d=>d.label===label); if(!dec) return;
+  decActiveTag=label;
+  $('#decChips').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.dec===label));
+  $('#decHint').textContent = `Loading ${dec.yr} stations…`;
+  $('#decResults').innerHTML = SKEL;
+  try{
+    const batches = await Promise.all(dec.tags.map(t=>
+      api(`/json/stations/bytagexact/${encodeURIComponent(t)}?order=clickcount&reverse=true&limit=20&hidebroken=true`).catch(()=>[])
+    ));
+    const seen=new Set();
+    const merged = prioByCountry(
+      batches.flat().filter(st=>st.url_resolved && (seen.has(st.stationuuid)?false:(seen.add(st.stationuuid),true)))
+    ).slice(0,30);
+    decList = merged;
+    $('#decHint').textContent = merged.length ? `${dec.yr} · ${merged.length} stations on air` : '';
+    $('#decResults').innerHTML = merged.length
+      ? merged.map((st,i)=>stationCard(st,i,true)).join('')
+      : `<div class="status">No ${dec.yr} stations found right now.</div>`;
+    bindCards($('#decResults'), decList); markPlaying();
+  }catch{ $('#decResults').innerHTML='<div class="status">Could not load stations.</div>'; }
+}
 
 // Expose shared helpers for frozen creator module
 window.__dome = {
@@ -1345,6 +1431,12 @@ window.__dome = {
   audio,
   flag,
   state,
+  get favs(){ return favs; },
+  set favs(v){ favs = v; },
+  get recents(){ return recents; },
+  set recents(v){ recents = v; },
+  renderLibrary,
+  updateFavUI,
 };
 
 initMediaSession(() => ({
