@@ -129,9 +129,9 @@
 
 ## Decision 7: Radio Browser stays client-direct
 
-**Decision**: Keep calling Radio Browser mirrors from the client with existing failover. No proxy in v1. Upgrade station **favicon** URLs from `http://` (and protocol-relative `//`) to `https://` before rendering or persisting snapshots so the HTTPS PWA does not load mixed-content images (NFR-SEC-001). Do **not** rewrite stream URLs the same way — many stations only serve audio over HTTP.
+**Decision**: Keep calling Radio Browser mirrors from the client with existing failover. No proxy in v1. Upgrade station **favicon** URLs from `http://` (and protocol-relative `//`) to `https://` before rendering or persisting snapshots so the HTTPS PWA does not load mixed-content images (NFR-SEC-001). For **streams**, try an HTTPS rewrite first via `streamPlayCandidates`; if that fails, fall back once to the original HTTP URL so HTTP-only icy/mp3 servers still play. Do **not** run a Dome-owned HTTPS stream proxy in v1 (bandwidth / free-tier cost).
 
-**Rationale**: Zero backend cost; works in the prototype. Favicon HTTPS upgrade is a client-only fix for browser “connection not fully secure” warnings. Add a Netlify proxy later only if mirrors/CORS become unreliable.
+**Rationale**: Zero backend cost; works in the prototype. Favicon HTTPS upgrade removes browse-time mixed content. Stream HTTPS-first reduces “not secure” on play when the station supports TLS; HTTP fallback preserves reachability knowing Brave/Chrome may warn on that path only. Add a Netlify proxy later only if mirrors/CORS become unreliable or product requires a secure lock for every station.
 
 ---
 
