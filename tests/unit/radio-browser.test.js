@@ -1,5 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { api, BASES } from '../../src/api/radio-browser.js';
+import { api, BASES, secureAssetUrl } from '../../src/api/radio-browser.js';
+
+describe('secureAssetUrl', () => {
+  it('upgrades http favicons to https', () => {
+    expect(secureAssetUrl('http://example.com/icon.png')).toBe('https://example.com/icon.png');
+  });
+
+  it('leaves https urls unchanged', () => {
+    expect(secureAssetUrl('https://example.com/icon.png')).toBe('https://example.com/icon.png');
+  });
+
+  it('upgrades protocol-relative urls', () => {
+    expect(secureAssetUrl('//cdn.example.com/a.png')).toBe('https://cdn.example.com/a.png');
+  });
+
+  it('returns empty for missing values', () => {
+    expect(secureAssetUrl('')).toBe('');
+    expect(secureAssetUrl(null)).toBe('');
+    expect(secureAssetUrl(undefined)).toBe('');
+  });
+});
 
 describe('radio-browser api failover', () => {
   beforeEach(() => {
