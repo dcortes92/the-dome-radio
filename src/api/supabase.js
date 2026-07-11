@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { store } from '../store.js';
 import { isPremium } from './premium.js';
+import { secureAssetUrl } from './radio-browser.js';
 
 let client = null;
 
@@ -75,7 +76,7 @@ export async function addFavorite(station) {
   if (!user) throw new Error('Not signed in');
   const snapshot = {
     name: station.name,
-    favicon: station.favicon,
+    favicon: secureAssetUrl(station.favicon),
     url: station.url_resolved || station.url,
     country: station.country,
     countrycode: station.countrycode,
@@ -103,7 +104,7 @@ export async function upsertRecent(station) {
   if (!user) return;
   const snapshot = {
     name: station.name,
-    favicon: station.favicon,
+    favicon: secureAssetUrl(station.favicon),
     url: station.url_resolved || station.url,
     country: station.country,
     countrycode: station.countrycode,
