@@ -149,7 +149,9 @@ Slots are empty DOM containers; ad network script loads only when `shouldShowAds
 
 Client `api(path)` with mirror failover. No Dome-owned contract beyond “reachable station list + stream URL for playback.”
 
-Station **favicon** (and other display images from the catalog) MUST be passed through `secureAssetUrl` before `<img>`, MediaSession artwork, graph nodes, or persisted snapshots so `http://` and protocol-relative URLs become `https://` (NFR-SEC-001). Stream `url` / `url_resolved` are not rewritten.
+Station **favicon** (and other display images from the catalog) MUST be passed through `secureAssetUrl` before `<img>`, MediaSession artwork, graph nodes, or persisted snapshots so `http://` and protocol-relative URLs become `https://` (NFR-SEC-001).
+
+Stream `url` / `url_resolved` MUST be played via `streamPlayCandidates`: HTTPS first, then original HTTP once if needed. Streams are not permanently rewritten in snapshots.
 
 ---
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { api, BASES, secureAssetUrl } from '../../src/api/radio-browser.js';
+import { api, BASES, secureAssetUrl, streamPlayCandidates } from '../../src/api/radio-browser.js';
 
 describe('secureAssetUrl', () => {
   it('upgrades http favicons to https', () => {
@@ -18,6 +18,33 @@ describe('secureAssetUrl', () => {
     expect(secureAssetUrl('')).toBe('');
     expect(secureAssetUrl(null)).toBe('');
     expect(secureAssetUrl(undefined)).toBe('');
+  });
+});
+
+describe('streamPlayCandidates', () => {
+  it('prefers https then original http', () => {
+    expect(streamPlayCandidates('http://stream.example:8000/mp3')).toEqual([
+      'https://stream.example:8000/mp3',
+      'http://stream.example:8000/mp3',
+    ]);
+  });
+
+  it('returns only https when already secure', () => {
+    expect(streamPlayCandidates('https://stream.example/live')).toEqual([
+      'https://stream.example/live',
+    ]);
+  });
+
+  it('normalizes protocol-relative to https then http', () => {
+    expect(streamPlayCandidates('//cdn.example.com/live')).toEqual([
+      'https://cdn.example.com/live',
+      'http://cdn.example.com/live',
+    ]);
+  });
+
+  it('returns empty for missing values', () => {
+    expect(streamPlayCandidates('')).toEqual([]);
+    expect(streamPlayCandidates(null)).toEqual([]);
   });
 });
 

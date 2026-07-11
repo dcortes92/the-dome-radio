@@ -78,7 +78,7 @@ Not stored as a first-class table. Identified by Radio Browser `stationuuid`. Sn
 |--------------|---------|
 | `name` | Display |
 | `favicon` | Icon (always stored/displayed as `https://` when the source was `http://` or protocol-relative — see NFR-SEC-001) |
-| `url` / `url_resolved` | Stream (may remain `http://`; not upgraded) |
+| `url` / `url_resolved` | Stream (playback tries `https://` first via `streamPlayCandidates`; may fall back to original `http://` — see NFR-SEC-001) |
 | `country` / `countrycode` | Atlas UI |
 | `tags` | Genre chips |
 | `bitrate` | Optional meta |

@@ -1,5 +1,5 @@
 import { store } from './store.js';
-import { api, secureAssetUrl } from './api/radio-browser.js';
+import { api, secureAssetUrl, streamPlayCandidates } from './api/radio-browser.js';
 import {
   updateMediaSession,
   setMediaPlaybackState,
@@ -11,6 +11,9 @@ import {
 const $ = s => document.querySelector(s);
 const state = { list:[], idx:-1, playing:false };
 const audio = $('#audio');
+let playGen = 0;
+let streamCandidates = [];
+let streamCandidateIdx = 0;
 
 let favs=store.get('favs',[]), recents=store.get('recents',[]);
 function slimSt(s){ return {stationuuid:s.stationuuid,name:s.name,url:s.url,url_resolved:s.url_resolved,favicon:secureAssetUrl(s.favicon),country:s.country,countrycode:s.countrycode,codec:s.codec,bitrate:s.bitrate,tags:s.tags}; }
@@ -153,6 +156,37 @@ function setDockStatus(text, err=false){
   dockMeta.textContent = text;
   dockMeta.classList.toggle('err', err);
 }
+function onStreamFail(gen, st, failedIdx){
+  if(gen !== playGen) return;
+  if(failedIdx !== streamCandidateIdx) return;
+  if(streamCandidateIdx + 1 < streamCandidates.length){
+    streamCandidateIdx += 1;
+    loadStreamCandidate(gen, st);
+    return;
+  }
+  state.playing = false;
+  refreshPlayUI();
+  setMediaPlaybackState(false);
+  signalLost();
+}
+function loadStreamCandidate(gen, st){
+  if(gen !== playGen) return;
+  const idx = streamCandidateIdx;
+  const url = streamCandidates[idx];
+  if(!url){
+    onStreamFail(gen, st, idx);
+    return;
+  }
+  audio.src = url;
+  audio.play().then(()=>{
+    if(gen !== playGen) return;
+    state.playing = true; refreshPlayUI(); setMediaPlaybackState(true);
+    setDockStatus(metaLine(st) + (st.bitrate?` · ${st.bitrate}kbps`:''));
+    if(!String(st.stationuuid).startsWith('own:')){
+      api('/json/url/'+st.stationuuid).catch(()=>{});
+    }
+  }).catch(()=> onStreamFail(gen, st, idx));
+}
 function play(list, idx){
   state.list = list; state.idx = idx;
   const st = list[idx];
@@ -166,16 +200,11 @@ function play(list, idx){
   dockArt.innerHTML = artHTML(st);
   setDockStatus('Tuning in…');
   updateMediaSession(st);
-  // stream
-  audio.src = st.url_resolved || st.url;
-  audio.play().then(()=>{
-    state.playing = true; refreshPlayUI(); setMediaPlaybackState(true);
-    setDockStatus(metaLine(st) + (st.bitrate?` · ${st.bitrate}kbps`:''));
-    api('/json/url/'+st.stationuuid).catch(()=>{}); // count the listen
-  }).catch(()=>{
-    state.playing = false; refreshPlayUI();
-    signalLost();
-  });
+  // stream — HTTPS first, HTTP fallback when catalog only has insecure URL
+  const gen = ++playGen;
+  streamCandidates = streamPlayCandidates(st.url_resolved || st.url);
+  streamCandidateIdx = 0;
+  loadStreamCandidate(gen, st);
   markPlaying();
   if(!$('#app').classList.contains('has-dock')){
     $('#app').classList.add('has-dock');
@@ -212,7 +241,10 @@ function togglePlay(){
 playBtn.addEventListener('click',togglePlay);
 $('#nextBtn').addEventListener('click',()=>{ if(state.list.length) play(state.list,(state.idx+1)%state.list.length); });
 $('#prevBtn').addEventListener('click',()=>{ if(state.list.length) play(state.list,(state.idx-1+state.list.length)%state.list.length); });
-audio.addEventListener('error',()=>{ if(state.idx>=0){ state.playing=false; refreshPlayUI(); signalLost();} });
+audio.addEventListener('error',()=>{
+  if(state.idx<0) return;
+  onStreamFail(playGen, state.list[state.idx], streamCandidateIdx);
+});
 audio.addEventListener('stalled',()=> setDockStatus('Buffering…'));
 audio.addEventListener('playing',()=>{ state.playing=true; refreshPlayUI(); if(state.idx>=0) setDockStatus(metaLine(state.list[state.idx])); });
 
