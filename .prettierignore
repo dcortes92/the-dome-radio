@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+playwright-report
+test-results
+.netlify
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+*.min.js
+public/assets

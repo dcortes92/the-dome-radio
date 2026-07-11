@@ -40,17 +40,20 @@ Near-zero cost is intentional: free tiers first; see the [plan](specs/001-dome-r
 
 Project principles live in [`.specify/memory/constitution.md`](.specify/memory/constitution.md).
 
-## Local prototype
-
-The current site is a static deploy — open `index.html` via any static server, or use Netlify Dev if you already have the CLI:
+## Local development
 
 ```bash
-# example: Python
-python3 -m http.server 8080
-# then visit http://localhost:8080
+nvm use 22   # Node 20+ required
+npm install
+npm run dev          # http://localhost:5173 — append #skip to bypass auth sheet
+npm test             # Vitest unit tests
+npm run build        # output in dist/
+npm run preview      # preview production build
 ```
 
-Vite-based `npm` scripts land when Phase 1 of [`tasks.md`](specs/001-dome-radio-pwa/tasks.md) is implemented.
+Copy `.env.example` to `.env.local` and fill Supabase / Stripe / AdSense values when ready. Netlify Functions need the non-`VITE_` secrets set in the Netlify UI.
+
+Apply the SQL in [`supabase/migrations/001_init.sql`](supabase/migrations/001_init.sql) to your Supabase project before enabling real auth sync.
 
 ## License
 

@@ -1,0 +1,2 @@
+# ads.txt placeholder — replace with your ad network line when approved
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

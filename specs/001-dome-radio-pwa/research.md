@@ -1,17 +1,17 @@
 # Research: The Dome Radio PWA
 
-**Date**: 2026-07-09  
+**Date**: 2026-07-10 (re-validated; originally 2026-07-09)  
 **Spec**: [spec.md](./spec.md)  
-**Prior input**: Cursor plan `backend_and_ui_refactor_299314b5` + near-zero cost constraint
+**Prior input**: Cursor plan `backend_and_ui_refactor_299314b5` + near-zero cost constraint + stakeholder ask “is React worth it?”
 
 ## Decision 1: Keep vanilla JS + Vite; do not migrate to React (v1)
 
-**Decision**: Modularize the existing HTML/CSS/JS prototype with Vite and ES modules. Do **not** rewrite in React/Vue/Svelte for this release.
+**Decision**: Modularize the existing HTML/CSS/JS prototype with Vite and ES modules. Do **not** rewrite in React/Vue/Svelte for this release. The app **is / remains a PWA** via `manifest.json` + service worker — framework choice is orthogonal to installability.
 
 **Rationale**:
-- The prototype already works and is deployed; user value is auth, sync, ads, and paid ad-free — not a framework swap.
-- The UI is DOM-heavy (Leaflet map, canvas genre graph, rotary dial, MediaSession). A React rewrite would re-implement the same DOM work with high regression risk and weeks of effort.
-- Vite gives a real build (env vars, asset hashing, module split) while preserving behavior.
+- The prototype already works and is deployed on Netlify; user value is auth, sync, ads, and paid ad-free — not a framework swap.
+- The UI is DOM-heavy (Leaflet map, canvas genre graph, rotary dial, MediaSession). A React rewrite would re-implement the same DOM work with high regression risk and weeks of effort — poor fit for a near-zero-cost, improve-what-works mandate.
+- Vite gives a real build (env vars, asset hashing, module split) while preserving behavior and PWA shell.
 - Constitution I (code quality) is better served by extracting modules than by introducing a second paradigm mid-flight.
 
 **Alternatives considered**:

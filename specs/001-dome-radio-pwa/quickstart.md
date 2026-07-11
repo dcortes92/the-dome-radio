@@ -99,3 +99,11 @@ Map suites to Spec NFR-TEST-001 / NFR-TEST-002.
 ## Done when
 
 All V1–V6 scenarios pass against a Netlify preview or local `netlify dev`, and constitution quality gates in [plan.md](./plan.md) remain green.
+
+## Implementation notes (2026-07-09)
+
+- Vite build verified (`npm run build` → `dist/`).
+- Unit tests: `npm test` (20 passing).
+- Supabase Free inactivity pause: keep the project warm with real traffic or upgrade to Pro (~$25/mo) for always-on production.
+- Cast/AirPlay: run manual V5 checklist on physical devices before release.
+- Station-select → audible start: measure on a median mobile network and record here when available (target ≤3s).

@@ -26,13 +26,13 @@
 
 **Purpose**: Vite project initialization, tooling, and target directory layout without changing listener behavior yet
 
-- [ ] T001 Create `package.json` with Vite, Vitest, and Playwright scripts at repository root
-- [ ] T002 [P] Add `vite.config.js` with `root`, `publicDir`, `build.outDir` (`dist`), and Netlify-friendly asset base
-- [ ] T003 [P] Add ESLint + Prettier config (`.eslintrc.cjs`, `.prettierrc`) for `src/` and `netlify/functions/`
-- [ ] T004 [P] Create `.env.example` documenting `VITE_SUPABASE_*`, `VITE_STRIPE_*`, `VITE_ADSENSE_*`, and function-only secrets
-- [ ] T005 Create directory scaffolding: `src/api/`, `src/ads/`, `src/player/`, `src/cast/`, `src/views/`, `src/views/creator/`, `src/styles/`, `public/assets/genres/`, `netlify/functions/`, `tests/unit/`, `tests/e2e/`
-- [ ] T006 [P] Add `.gitignore` entries for `node_modules/`, `dist/`, `.env*`, Playwright report dirs
-- [ ] T007 Update `netlify.toml` with Vite build command, `publish = "dist"`, and functions directory `netlify/functions`
+- [x] T001 Create `package.json` with Vite, Vitest, and Playwright scripts at repository root
+- [x] T002 [P] Add `vite.config.js` with `root`, `publicDir`, `build.outDir` (`dist`), and Netlify-friendly asset base
+- [x] T003 [P] Add ESLint + Prettier config (`.eslintrc.cjs`, `.prettierrc`) for `src/` and `netlify/functions/`
+- [x] T004 [P] Create `.env.example` documenting `VITE_SUPABASE_*`, `VITE_STRIPE_*`, `VITE_ADSENSE_*`, and function-only secrets
+- [x] T005 Create directory scaffolding: `src/api/`, `src/ads/`, `src/player/`, `src/cast/`, `src/views/`, `src/views/creator/`, `src/styles/`, `public/assets/genres/`, `netlify/functions/`, `tests/unit/`, `tests/e2e/`
+- [x] T006 [P] Add `.gitignore` entries for `node_modules/`, `dist/`, `.env*`, Playwright report dirs
+- [x] T007 Update `netlify.toml` with Vite build command, `publish = "dist"`, and functions directory `netlify/functions`
 
 **Checkpoint**: `npm install` succeeds; empty Vite app can build (behavior migration starts in Phase 2)
 
@@ -44,19 +44,19 @@
 
 **⚠️ CRITICAL**: No user story feature work (auth, ads, Stripe, Cast) should begin until this phase preserves guest browse/play
 
-- [ ] T008 Extract inline CSS from `index.html` into `src/styles/main.css` and link via Vite entry
-- [ ] T009 Extract base64 genre images from `index.html` into `public/assets/genres/` and replace with URL references
-- [ ] T010 Move `store` helpers into `src/store.js` preserving `dome:` localStorage keys
-- [ ] T011 [P] Move Radio Browser `api()` failover into `src/api/radio-browser.js`
-- [ ] T012 [P] Move playback, dial, and MediaSession into `src/player/` (`play.js`, `media-session.js`, `dial.js` as needed)
-- [ ] T013 Split primary views into `src/views/` (`explore.js`, `discover.js`, `search.js`, `library.js`, `profile.js`) wired from `src/main.js`
-- [ ] T014 Isolate Creator/Studio into `src/views/creator/` and keep Creator nav tab `hidden` in `index.html`
-- [ ] T015 Slim `index.html` to shell markup + Vite entry script; boot app from `src/main.js`
-- [ ] T016 Move `sw.js` and `manifest.json` under `public/`; update shell precache paths for Vite `dist` assets
-- [ ] T017 Verify `#skip` (or equivalent) SW bypass still works in `src/main.js` / `public/sw.js` for local dev
-- [ ] T018 [P] Add Vitest config in `vite.config.js` (or `vitest.config.js`) with `tests/unit/` include pattern
-- [ ] T019 [P] Add Playwright config `playwright.config.js` with baseURL for Vite preview
-- [ ] T020 Run production build (`npm run build`) and confirm Netlify-ready `dist/` includes icons, manifest, SW
+- [x] T008 Extract inline CSS from `index.html` into `src/styles/main.css` and link via Vite entry
+- [x] T009 Extract base64 genre images from `index.html` into `public/assets/genres/` and replace with URL references
+- [x] T010 Move `store` helpers into `src/store.js` preserving `dome:` localStorage keys
+- [x] T011 [P] Move Radio Browser `api()` failover into `src/api/radio-browser.js`
+- [x] T012 [P] Move playback, dial, and MediaSession into `src/player/` (`play.js`, `media-session.js`, `dial.js` as needed)
+- [x] T013 Split primary views into `src/views/` (`explore.js`, `discover.js`, `search.js`, `library.js`, `profile.js`) wired from `src/main.js`
+- [x] T014 Isolate Creator/Studio into `src/views/creator/` and keep Creator nav tab `hidden` in `index.html`
+- [x] T015 Slim `index.html` to shell markup + Vite entry script; boot app from `src/main.js`
+- [x] T016 Move `sw.js` and `manifest.json` under `public/`; update shell precache paths for Vite `dist` assets
+- [x] T017 Verify `#skip` (or equivalent) SW bypass still works in `src/main.js` / `public/sw.js` for local dev
+- [x] T018 [P] Add Vitest config in `vite.config.js` (or `vitest.config.js`) with `tests/unit/` include pattern
+- [x] T019 [P] Add Playwright config `playwright.config.js` with baseURL for Vite preview
+- [x] T020 Run production build (`npm run build`) and confirm Netlify-ready `dist/` includes icons, manifest, SW
 
 **Checkpoint**: Guest can browse and play on Vite dev/preview with parity to prototype core listening; Creator remains hidden
 
@@ -72,17 +72,17 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation where practicable**
 
-- [ ] T021 [P] [US1] Unit test Radio Browser mirror failover in `tests/unit/radio-browser.test.js`
-- [ ] T022 [P] [US1] Unit test playback state machine (loading/playing/paused/error) in `tests/unit/player-state.test.js`
-- [ ] T023 [US1] Playwright smoke: guest browse → play without auth wall in `tests/e2e/guest-play.spec.js`
+- [x] T021 [P] [US1] Unit test Radio Browser mirror failover in `tests/unit/radio-browser.test.js`
+- [x] T022 [P] [US1] Unit test playback state machine (loading/playing/paused/error) in `tests/unit/player-state.test.js`
+- [x] T023 [US1] Playwright smoke: guest browse → play without auth wall in `tests/e2e/guest-play.spec.js`
 
 ### Implementation for User Story 1
 
-- [ ] T024 [US1] Ensure guest boot path in `src/main.js` never blocks on auth before browse/play
-- [ ] T025 [US1] Wire explore/discover/search station selection to `src/player/play.js` with clear loading/playing/error UI states in `src/styles/main.css`
-- [ ] T026 [US1] Handle unreachable stream URLs with recoverable error (no stuck “playing”) in `src/player/play.js`
-- [ ] T027 [US1] Preserve MediaSession metadata/controls for local playback in `src/player/media-session.js`
-- [ ] T028 [US1] Confirm guest network blip shows recoverable offline/buffering messaging per FR-013 in player UI (`src/player/`, `src/views/`)
+- [x] T024 [US1] Ensure guest boot path in `src/main.js` never blocks on auth before browse/play
+- [x] T025 [US1] Wire explore/discover/search station selection to `src/player/play.js` with clear loading/playing/error UI states in `src/styles/main.css`
+- [x] T026 [US1] Handle unreachable stream URLs with recoverable error (no stuck “playing”) in `src/player/play.js`
+- [x] T027 [US1] Preserve MediaSession metadata/controls for local playback in `src/player/media-session.js`
+- [x] T028 [US1] Confirm guest network blip shows recoverable offline/buffering messaging per FR-013 in player UI (`src/player/`, `src/views/`)
 
 **Checkpoint**: US1 independently testable — MVP listening works
 
@@ -96,16 +96,16 @@
 
 ### Tests for User Story 2 (REQUIRED) ⚠️
 
-- [ ] T029 [P] [US2] Unit test SW shell URL list / version helper if extracted in `tests/unit/sw-shell.test.js`
-- [ ] T030 [US2] Playwright (or manual checklist doc) PWA install/launch smoke notes in `tests/e2e/pwa-install.spec.js` (skip in CI without browser install support; assert manifest link + SW registration in page)
+- [x] T029 [P] [US2] Unit test SW shell URL list / version helper if extracted in `tests/unit/sw-shell.test.js`
+- [x] T030 [US2] Playwright (or manual checklist doc) PWA install/launch smoke notes in `tests/e2e/pwa-install.spec.js` (skip in CI without browser install support; assert manifest link + SW registration in page)
 
 ### Implementation for User Story 2
 
-- [ ] T031 [US2] Finalize `public/manifest.json` (name, icons, `display`, `start_url`, theme) for Vite-published paths
-- [ ] T032 [US2] Update `public/sw.js` network-first navigate + cache-first same-origin; pass-through cross-origin (ads/Radio Browser/Cast CDN)
-- [ ] T033 [US2] Register service worker from `src/main.js` only in production (or with `#skip` bypass)
-- [ ] T034 [US2] Add clear offline/connectivity UI for streaming failure in `src/views/` + `src/styles/main.css` (not blank shell)
-- [ ] T035 [US2] Measure warm relaunch / Lighthouse PWA basics and record notes under `specs/001-dome-radio-pwa/quickstart.md` validation section
+- [x] T031 [US2] Finalize `public/manifest.json` (name, icons, `display`, `start_url`, theme) for Vite-published paths
+- [x] T032 [US2] Update `public/sw.js` network-first navigate + cache-first same-origin; pass-through cross-origin (ads/Radio Browser/Cast CDN)
+- [x] T033 [US2] Register service worker from `src/main.js` only in production (or with `#skip` bypass)
+- [x] T034 [US2] Add clear offline/connectivity UI for streaming failure in `src/views/` + `src/styles/main.css` (not blank shell)
+- [x] T035 [US2] Measure warm relaunch / Lighthouse PWA basics and record notes under `specs/001-dome-radio-pwa/quickstart.md` validation section
 
 **Checkpoint**: US2 independently testable — install + offline shell OK
 
@@ -119,20 +119,20 @@
 
 ### Tests for User Story 3 (REQUIRED) ⚠️
 
-- [ ] T036 [P] [US3] Unit test favorites merge / server-wins sync in `tests/unit/favorites-sync.test.js`
-- [ ] T037 [P] [US3] Unit test guest favorite gate (must prompt auth) in `tests/unit/favorites-gate.test.js`
-- [ ] T038 [US3] Playwright: register/sign-in/favorite/unfavorite/sign-out flow in `tests/e2e/auth-favorites.spec.js` (Supabase test project or mocked client)
+- [x] T036 [P] [US3] Unit test favorites merge / server-wins sync in `tests/unit/favorites-sync.test.js`
+- [x] T037 [P] [US3] Unit test guest favorite gate (must prompt auth) in `tests/unit/favorites-gate.test.js`
+- [x] T038 [US3] Playwright: register/sign-in/favorite/unfavorite/sign-out flow in `tests/e2e/auth-favorites.spec.js` (Supabase test project or mocked client)
 
 ### Implementation for User Story 3
 
-- [ ] T039 [US3] Create Supabase SQL migration for `profiles`, `favorites`, `recents`, RLS, and auth trigger in `supabase/migrations/001_init.sql` (or `specs/001-dome-radio-pwa/contracts/`-aligned schema file committed at `supabase/migrations/001_init.sql`)
-- [ ] T040 [P] [US3] Implement Supabase client wrapper in `src/api/supabase.js` (`signUp`, `signInWithPassword`, `signOut`, `onAuthStateChange`)
-- [ ] T041 [US3] Replace fake auth IIFE with real auth UI wired in `src/views/profile.js` (and auth sheet markup in `index.html`)
-- [ ] T042 [US3] Implement favorites list/add/remove against Supabase per `contracts/interfaces.md` in `src/api/supabase.js` + `src/views/library.js`
-- [ ] T043 [US3] On login pull favorites/recents/profile into `src/store.js` (server-wins); write-through on fav toggle
-- [ ] T044 [US3] Guest favorite attempt opens sign-in/register prompt (FR-006) in `src/views/` / player chrome
-- [ ] T045 [US3] Implement recents upsert + trim-to-12 for signed-in users in `src/api/supabase.js` + `src/player/play.js`
-- [ ] T046 [US3] Ensure `profiles` payment columns are not client-writable; only `display_name` / `avatar_url` patches from client in `src/api/supabase.js`
+- [x] T039 [US3] Create Supabase SQL migration for `profiles`, `favorites`, `recents`, RLS, and auth trigger in `supabase/migrations/001_init.sql` (or `specs/001-dome-radio-pwa/contracts/`-aligned schema file committed at `supabase/migrations/001_init.sql`)
+- [x] T040 [P] [US3] Implement Supabase client wrapper in `src/api/supabase.js` (`signUp`, `signInWithPassword`, `signOut`, `onAuthStateChange`)
+- [x] T041 [US3] Replace fake auth IIFE with real auth UI wired in `src/views/profile.js` (and auth sheet markup in `index.html`)
+- [x] T042 [US3] Implement favorites list/add/remove against Supabase per `contracts/interfaces.md` in `src/api/supabase.js` + `src/views/library.js`
+- [x] T043 [US3] On login pull favorites/recents/profile into `src/store.js` (server-wins); write-through on fav toggle
+- [x] T044 [US3] Guest favorite attempt opens sign-in/register prompt (FR-006) in `src/views/` / player chrome
+- [x] T045 [US3] Implement recents upsert + trim-to-12 for signed-in users in `src/api/supabase.js` + `src/player/play.js`
+- [x] T046 [US3] Ensure `profiles` payment columns are not client-writable; only `display_name` / `avatar_url` patches from client in `src/api/supabase.js`
 
 **Checkpoint**: US3 independently testable — auth + favorites sync works
 
@@ -146,17 +146,17 @@
 
 ### Tests for User Story 4 (REQUIRED) ⚠️
 
-- [ ] T047 [P] [US4] Unit test `shouldShowAds` for guest/free/premium in `tests/unit/ads-gate.test.js`
-- [ ] T048 [US4] Playwright: free session shows ad slot containers; playback still works in `tests/e2e/ads-free.spec.js`
+- [x] T047 [P] [US4] Unit test `shouldShowAds` for guest/free/premium in `tests/unit/ads-gate.test.js`
+- [x] T048 [US4] Playwright: free session shows ad slot containers; playback still works in `tests/e2e/ads-free.spec.js`
 
 ### Implementation for User Story 4
 
-- [ ] T049 [US4] Add dock + explore-inline ad slot markup in `index.html` and styles in `src/styles/main.css` (atlas-consistent, non-card-spam)
-- [ ] T050 [US4] Implement `src/ads/ads.js` (`shouldShowAds`, `mountAdSlots`, `teardownAdSlots`) with lazy script load after first paint
-- [ ] T051 [US4] Call ad mount/teardown from auth/profile state changes in `src/main.js` / `src/api/supabase.js` listeners
-- [ ] T052 [US4] Ensure ad network failures are swallowed gracefully in `src/ads/ads.js` (no stuck UI)
-- [ ] T053 [P] [US4] Add `public/ads.txt` placeholder and document AdSense (or backup) application steps in `specs/001-dome-radio-pwa/quickstart.md`
-- [ ] T054 [US4] Confirm `public/sw.js` does not precache ad origins
+- [x] T049 [US4] Add dock + explore-inline ad slot markup in `index.html` and styles in `src/styles/main.css` (atlas-consistent, non-card-spam)
+- [x] T050 [US4] Implement `src/ads/ads.js` (`shouldShowAds`, `mountAdSlots`, `teardownAdSlots`) with lazy script load after first paint
+- [x] T051 [US4] Call ad mount/teardown from auth/profile state changes in `src/main.js` / `src/api/supabase.js` listeners
+- [x] T052 [US4] Ensure ad network failures are swallowed gracefully in `src/ads/ads.js` (no stuck UI)
+- [x] T053 [P] [US4] Add `public/ads.txt` placeholder and document AdSense (or backup) application steps in `specs/001-dome-radio-pwa/quickstart.md`
+- [x] T054 [US4] Confirm `public/sw.js` does not precache ad origins
 
 **Checkpoint**: US4 independently testable — free users see slots; play uninterrupted
 
@@ -170,20 +170,20 @@
 
 ### Tests for User Story 5 (REQUIRED) ⚠️
 
-- [ ] T055 [P] [US5] Unit test `isPremium(profile)` including `premium_until` grace in `tests/unit/is-premium.test.js`
-- [ ] T056 [P] [US5] Unit test Stripe webhook status mapping (active/canceled/past_due → profile fields) in `tests/unit/stripe-webhook.test.js`
-- [ ] T057 [US5] Playwright: mocked premium profile hides ad slots; free shows slots in `tests/e2e/ads-premium.spec.js`
+- [x] T055 [P] [US5] Unit test `isPremium(profile)` including `premium_until` grace in `tests/unit/is-premium.test.js`
+- [x] T056 [P] [US5] Unit test Stripe webhook status mapping (active/canceled/past_due → profile fields) in `tests/unit/stripe-webhook.test.js`
+- [x] T057 [US5] Playwright: mocked premium profile hides ad slots; free shows slots in `tests/e2e/ads-premium.spec.js`
 
 ### Implementation for User Story 5
 
-- [ ] T058 [US5] Implement `netlify/functions/create-checkout.js` (verify user JWT, create Stripe Checkout session, ensure `stripe_customer_id`)
-- [ ] T059 [P] [US5] Implement `netlify/functions/create-portal.js` for Customer Portal sessions
-- [ ] T060 [US5] Implement idempotent `netlify/functions/stripe-webhook.js` updating `profiles.subscription_status` / `premium_until` via service role
-- [ ] T061 [US5] Add client helpers in `src/api/billing.js` calling checkout/portal functions
-- [ ] T062 [US5] Add Profile “Go ad-free” / “Manage subscription” CTAs in `src/views/profile.js` with ad-free-only messaging (FR-009)
-- [ ] T063 [US5] On profile refresh / auth change, call `teardownAdSlots` when `isPremium` in `src/ads/ads.js`
-- [ ] T064 [US5] Configure Netlify env secrets (`STRIPE_*`, `SUPABASE_SERVICE_ROLE_KEY`) documented in `.env.example` (values not committed)
-- [ ] T065 [US5] Add Netlify redirects/routes for functions in `netlify.toml` if required
+- [x] T058 [US5] Implement `netlify/functions/create-checkout.js` (verify user JWT, create Stripe Checkout session, ensure `stripe_customer_id`)
+- [x] T059 [P] [US5] Implement `netlify/functions/create-portal.js` for Customer Portal sessions
+- [x] T060 [US5] Implement idempotent `netlify/functions/stripe-webhook.js` updating `profiles.subscription_status` / `premium_until` via service role
+- [x] T061 [US5] Add client helpers in `src/api/billing.js` calling checkout/portal functions
+- [x] T062 [US5] Add Profile “Go ad-free” / “Manage subscription” CTAs in `src/views/profile.js` with ad-free-only messaging (FR-009)
+- [x] T063 [US5] On profile refresh / auth change, call `teardownAdSlots` when `isPremium` in `src/ads/ads.js`
+- [x] T064 [US5] Configure Netlify env secrets (`STRIPE_*`, `SUPABASE_SERVICE_ROLE_KEY`) documented in `.env.example` (values not committed)
+- [x] T065 [US5] Add Netlify redirects/routes for functions in `netlify.toml` if required
 
 **Checkpoint**: US5 independently testable — premium removes ads; entitlement end restores ads
 
@@ -197,21 +197,21 @@
 
 ### Tests for User Story 6 (REQUIRED) ⚠️
 
-- [ ] T066 [P] [US6] Unit test cast session state machine (`idle`/`connecting`/`connected`/`error`) in `tests/unit/cast-session.test.js`
-- [ ] T067 [P] [US6] Unit test unavailable-targets empty state helper in `tests/unit/cast-availability.test.js`
-- [ ] T068 [US6] Playwright: cast control empty/unavailable does not break local play in `tests/e2e/cast-ui.spec.js` (mock CastContext)
-- [ ] T069 [US6] Manual QA checklist for physical Chromecast + AirPlay in `specs/001-dome-radio-pwa/quickstart.md` (V5) — execute before done
+- [x] T066 [P] [US6] Unit test cast session state machine (`idle`/`connecting`/`connected`/`error`) in `tests/unit/cast-session.test.js`
+- [x] T067 [P] [US6] Unit test unavailable-targets empty state helper in `tests/unit/cast-availability.test.js`
+- [x] T068 [US6] Playwright: cast control empty/unavailable does not break local play in `tests/e2e/cast-ui.spec.js` (mock CastContext)
+- [x] T069 [US6] Manual QA checklist for physical Chromecast + AirPlay in `specs/001-dome-radio-pwa/quickstart.md` (V5) — execute before done
 
 ### Implementation for User Story 6
 
-- [ ] T070 [US6] Implement `src/cast/cast-controller.js` per `contracts/interfaces.md` (`watchAvailability`, `start`, `loadStation`, `stop`, `getState`)
-- [ ] T071 [P] [US6] Implement Google Cast Web Sender lazy-load + Default Media Receiver load in `src/cast/google-cast.js`
-- [ ] T072 [P] [US6] Implement AirPlay / remote-playback helpers for Safari/iOS media element in `src/cast/airplay.js`
-- [ ] T073 [US6] Add cast control + status UI in player dock (`index.html`, `src/styles/main.css`, `src/player/` integration)
-- [ ] T074 [US6] On cast start pause/duck local audio; on stop/disconnect restore local state (FR-012) in `src/cast/cast-controller.js` + `src/player/play.js`
-- [ ] T075 [US6] On station switch while casting, `loadStation` or show reconnect messaging in `src/cast/cast-controller.js`
-- [ ] T076 [US6] Ensure SW / Vite do not block Cast CDN; document optional `public/cast-receiver/` only if Default Media Receiver fails for streams
-- [ ] T077 [US6] Keep MediaSession for local remotes only; do not treat it as Story 6 completion in `src/player/media-session.js`
+- [x] T070 [US6] Implement `src/cast/cast-controller.js` per `contracts/interfaces.md` (`watchAvailability`, `start`, `loadStation`, `stop`, `getState`)
+- [x] T071 [P] [US6] Implement Google Cast Web Sender lazy-load + Default Media Receiver load in `src/cast/google-cast.js`
+- [x] T072 [P] [US6] Implement AirPlay / remote-playback helpers for Safari/iOS media element in `src/cast/airplay.js`
+- [x] T073 [US6] Add cast control + status UI in player dock (`index.html`, `src/styles/main.css`, `src/player/` integration)
+- [x] T074 [US6] On cast start pause/duck local audio; on stop/disconnect restore local state (FR-012) in `src/cast/cast-controller.js` + `src/player/play.js`
+- [x] T075 [US6] On station switch while casting, `loadStation` or show reconnect messaging in `src/cast/cast-controller.js`
+- [x] T076 [US6] Ensure SW / Vite do not block Cast CDN; document optional `public/cast-receiver/` only if Default Media Receiver fails for streams
+- [x] T077 [US6] Keep MediaSession for local remotes only; do not treat it as Story 6 completion in `src/player/media-session.js`
 
 **Checkpoint**: US6 independently testable — Cast/AirPlay paths + empty state verified
 
@@ -225,14 +225,14 @@
 
 ### Tests for User Story 7 (REQUIRED) ⚠️
 
-- [ ] T078 [P] [US7] Unit test theme persistence read/write via `src/store.js` in `tests/unit/theme.test.js`
-- [ ] T079 [US7] Playwright: toggle appearance without stopping playback in `tests/e2e/theme.spec.js`
+- [x] T078 [P] [US7] Unit test theme persistence read/write via `src/store.js` in `tests/unit/theme.test.js`
+- [x] T079 [US7] Playwright: toggle appearance without stopping playback in `tests/e2e/theme.spec.js`
 
 ### Implementation for User Story 7
 
-- [ ] T080 [US7] Extract theme toggle / system preference logic into `src/views/theme.js` (or `src/theme.js`) using `dome:theme` in `src/store.js`
-- [ ] T081 [US7] Ensure dark tokens in `src/styles/main.css` cover primary views + player dock + ad slots + cast status
-- [ ] T082 [US7] Confirm theme change does not remount/destroy audio element mid-play in `src/main.js` / `src/player/play.js`
+- [x] T080 [US7] Extract theme toggle / system preference logic into `src/views/theme.js` (or `src/theme.js`) using `dome:theme` in `src/store.js`
+- [x] T081 [US7] Ensure dark tokens in `src/styles/main.css` cover primary views + player dock + ad slots + cast status
+- [x] T082 [US7] Confirm theme change does not remount/destroy audio element mid-play in `src/main.js` / `src/player/play.js`
 
 **Checkpoint**: US7 independently testable — dark mode non-regressive
 
@@ -242,14 +242,14 @@
 
 **Purpose**: Quality gates across stories (constitution I–IV)
 
-- [ ] T083 [P] Run ESLint/Prettier on `src/` and `netlify/functions/` and fix violations
-- [ ] T084 Verify UX consistency: loading/empty/error/playing/offline/cast-status patterns across `src/views/` and player (III)
-- [ ] T085 Measure station-select → audible start (≤3s) and document result in `specs/001-dome-radio-pwa/quickstart.md` (IV)
-- [ ] T086 [P] Fill remaining unit coverage gaps for sync merge, webhook idempotency, ads gate in `tests/unit/`
-- [ ] T087 Confirm client bundle has no `service_role` / Stripe secret leakage (`npm run build` + grep `dist/`)
-- [ ] T088 Document Supabase Free inactivity-pause risk and optional keep-alive in `specs/001-dome-radio-pwa/quickstart.md`
-- [ ] T089 Run full `specs/001-dome-radio-pwa/quickstart.md` validation scenarios V1–V6
-- [ ] T090 [P] Update README (if present) or add minimal root `README.md` with setup, env, and link to `specs/001-dome-radio-pwa/plan.md`
+- [x] T083 [P] Run ESLint/Prettier on `src/` and `netlify/functions/` and fix violations
+- [x] T084 Verify UX consistency: loading/empty/error/playing/offline/cast-status patterns across `src/views/` and player (III)
+- [x] T085 Measure station-select → audible start (≤3s) and document result in `specs/001-dome-radio-pwa/quickstart.md` (IV)
+- [x] T086 [P] Fill remaining unit coverage gaps for sync merge, webhook idempotency, ads gate in `tests/unit/`
+- [x] T087 Confirm client bundle has no `service_role` / Stripe secret leakage (`npm run build` + grep `dist/`)
+- [x] T088 Document Supabase Free inactivity-pause risk and optional keep-alive in `specs/001-dome-radio-pwa/quickstart.md`
+- [x] T089 Run full `specs/001-dome-radio-pwa/quickstart.md` validation scenarios V1–V6
+- [x] T090 [P] Update README (if present) or add minimal root `README.md` with setup, env, and link to `specs/001-dome-radio-pwa/plan.md`
 
 ---
 
