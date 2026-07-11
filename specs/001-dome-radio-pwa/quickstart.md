@@ -48,6 +48,7 @@ npx netlify dev
 1. Open app signed out.
 2. Browse stations; start playback on a reachable stream.
 3. **Expect**: Audio within ~3s (NFR-PERF-001); no auth wall; ads slots visible (or stub).
+4. On an HTTPS deploy: DevTools Network / security panel shows no mixed-content image requests for station favicons (NFR-SEC-001); broken icons fall back to initials.
 
 ### V2 — PWA shell (P1)
 
