@@ -188,6 +188,7 @@ Listeners can use dark mode (already present in the prototype) so the atlas UI r
 - **NFR-PERF-003**: Features MUST NOT regress Core Web Vitals relative to the current prototype baseline without an explicit, reviewed trade-off.
 - **NFR-TEST-001**: Acceptance scenarios for P1 and P2 stories MUST have automated coverage (unit, integration, or end-to-end as appropriate) before the feature is considered done.
 - **NFR-TEST-002**: Regression coverage MUST include station playback start/stop, favorites for registered users, ad vs ad-free behavior by entitlement, cast connect/disconnect happy path, PWA install/launch smoke, and dark mode toggle.
+- **NFR-SEC-001**: On HTTPS origins, station artwork and other remote images rendered by the app MUST NOT be requested over plain `http://` (upgrade to `https://` or omit / fall back) so the page does not trigger mixed-content warnings. Stream URLs MAY remain `http://` when that is all a station provides.
 
 ## Assumptions
 

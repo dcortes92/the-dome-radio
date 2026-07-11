@@ -1,5 +1,5 @@
 import { store } from './store.js';
-import { api } from './api/radio-browser.js';
+import { api, secureAssetUrl } from './api/radio-browser.js';
 import {
   updateMediaSession,
   setMediaPlaybackState,
@@ -13,7 +13,7 @@ const state = { list:[], idx:-1, playing:false };
 const audio = $('#audio');
 
 let favs=store.get('favs',[]), recents=store.get('recents',[]);
-function slimSt(s){ return {stationuuid:s.stationuuid,name:s.name,url:s.url,url_resolved:s.url_resolved,favicon:s.favicon,country:s.country,countrycode:s.countrycode,codec:s.codec,bitrate:s.bitrate,tags:s.tags}; }
+function slimSt(s){ return {stationuuid:s.stationuuid,name:s.name,url:s.url,url_resolved:s.url_resolved,favicon:secureAssetUrl(s.favicon),country:s.country,countrycode:s.countrycode,codec:s.codec,bitrate:s.bitrate,tags:s.tags}; }
 function isFav(uuid){ return favs.some(f=>f.stationuuid===uuid); }
 
 function flag(cc){
@@ -28,8 +28,9 @@ function hashFreq(uuid){
 }
 function artHTML(st){
   const fb = esc(initials(st.name));
-  return st.favicon
-    ? `<img src="${esc(st.favicon)}" alt="" loading="lazy" onerror="this.parentNode.textContent='${fb}'">`
+  const icon = secureAssetUrl(st.favicon);
+  return icon
+    ? `<img src="${esc(icon)}" alt="" loading="lazy" onerror="this.parentNode.textContent='${fb}'">`
     : fb;
 }
 function metaLine(st){
@@ -633,7 +634,8 @@ function addStationNode(st, px, py){
   const a=Math.random()*Math.PI*2;
   const n={kind:'st', st, x:px+Math.cos(a)*70, y:py+Math.sin(a)*70,
            vx:0, vy:0, r:16, born:performance.now(), expanded:false, img:null};
-  if(st.favicon){ n.img=new Image(); n.img.src=st.favicon; }
+  const icon=secureAssetUrl(st.favicon);
+  if(icon){ n.img=new Image(); n.img.src=icon; }
   GRAPH.nodes.push(n);
   return n;
 }

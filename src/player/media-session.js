@@ -1,3 +1,5 @@
+import { secureAssetUrl } from '../api/radio-browser.js';
+
 export function updateMediaSession(st) {
   if (!('mediaSession' in navigator) || !st) return;
   const country = st.country || (st.countrycode ? st.countrycode : '');
@@ -5,9 +7,10 @@ export function updateMediaSession(st) {
     .filter(Boolean)
     .join(' · ');
   const art = [];
-  if (st.favicon) {
+  const icon = secureAssetUrl(st.favicon);
+  if (icon) {
     ['96x96', '128x128', '192x192', '256x256', '512x512'].forEach((sizes) =>
-      art.push({ src: st.favicon, sizes, type: 'image/png' }),
+      art.push({ src: icon, sizes, type: 'image/png' }),
     );
   }
   try {

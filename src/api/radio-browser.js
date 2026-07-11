@@ -7,6 +7,15 @@ const BASES = [
 
 let baseIdx = 0;
 
+/** Upgrade http(s) asset URLs so HTTPS pages do not load mixed-content images. */
+export function secureAssetUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  if (trimmed.startsWith('//')) return `https:${trimmed}`;
+  return trimmed.replace(/^http:\/\//i, 'https://');
+}
+
 export async function api(path) {
   for (let i = 0; i < BASES.length; i++) {
     const b = BASES[(baseIdx + i) % BASES.length];
