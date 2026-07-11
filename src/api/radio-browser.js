@@ -16,6 +16,22 @@ export function secureAssetUrl(url) {
   return trimmed.replace(/^http:\/\//i, 'https://');
 }
 
+/**
+ * Playback URL order: prefer HTTPS to avoid mixed content; keep original HTTP
+ * as a one-shot fallback when the source was insecure.
+ */
+export function streamPlayCandidates(url) {
+  if (!url || typeof url !== 'string') return [];
+  const trimmed = url.trim();
+  if (!trimmed) return [];
+  const secure = secureAssetUrl(trimmed);
+  if (!secure) return [trimmed];
+  if (secure === trimmed || /^https:\/\//i.test(trimmed)) return [secure];
+  // http:// or // → try https first, then original (normalize // to http for fallback)
+  const insecure = trimmed.startsWith('//') ? `http:${trimmed}` : trimmed;
+  return [secure, insecure];
+}
+
 export async function api(path) {
   for (let i = 0; i < BASES.length; i++) {
     const b = BASES[(baseIdx + i) % BASES.length];
